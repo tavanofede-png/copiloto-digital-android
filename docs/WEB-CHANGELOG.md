@@ -178,4 +178,11 @@
 - Las actualizaciones publicadas en `main` se despliegan automáticamente en https://nieto-web.vercel.app.
 - Actualizadas las instrucciones de publicación para utilizar la integración de GitHub.
 
+### Video de presentación de 40 segundos
+
+- Creado un video horizontal Full HD con narración en español argentino y subtítulos sincronizados.
+- Incluye ayuda paso a paso, aprendizaje, la interfaz de Grupo familiar, ubicación compartida, alertas, aviso de voz y descarga.
+- Conservados los colores, ilustraciones y avatares del producto.
+- Añadidos el MP4, los subtítulos y la portada como archivos independientes para compartir desde la web.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
