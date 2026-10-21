@@ -193,8 +193,10 @@
 
         <div class="gf-demo-wrap">
           <div class="gf-demo-caption"><span>Así se verá desde tu celular</span><span class="gf-demo-badge">DEMO · DATOS FICTICIOS</span></div>
+          <button type="button" class="gf-open-mockup" id="gf-open-mockup"><i class="ui-icon" data-icon="screen" aria-hidden="true"></i>Explorar el mockup de la app<i class="ui-icon" data-icon="external" aria-hidden="true"></i></button>
           <div class="gf-demo" id="familia-demo">
             <header class="gf-demo-header"><span class="gf-brand"><i class="gf-icon" data-icon="family" aria-hidden="true"></i>Tu grupo familiar</span><span class="gf-access">Acceso compartido</span></header>
+            <div class="gf-controls">
             <div class="gf-member">
               <span class="gf-avatar" aria-hidden="true"><img src="assets/nieto-avatares.png" alt="" width="1774" height="887" loading="lazy" decoding="async" /></span>
               <div class="gf-member-copy"><h3>Mamá</h3><p>70 años</p></div>
@@ -211,13 +213,15 @@
             <div class="gf-scenarios" role="group" aria-label="Elegí una situación para probar la demo">
               <span>Probá un caso</span>
               <div><button type="button" data-gf-scenario="normal" aria-pressed="true">Uso normal</button><button type="button" data-gf-scenario="alert" aria-pressed="false">Sitio inseguro</button><button type="button" data-gf-scenario="offline" aria-pressed="false">Nieto desactivado</button></div>
+              <label class="gf-scenario-compact" for="gf-scenario-select">Caso de ejemplo<select id="gf-scenario-select"><option value="normal">Uso normal</option><option value="alert">Sitio inseguro</option><option value="offline">Nieto desactivado</option></select></label>
             </div>
             <p class="gf-session-note" id="gf-session-note" hidden>No se reciben nuevos datos. Se muestran los últimos registros compartidos.</p>
-            <div class="gf-tabs" role="tablist" aria-label="Información del grupo familiar">
+            <div class="gf-tabs" role="tablist" aria-label="Información del grupo familiar" aria-orientation="horizontal">
               <button type="button" id="gf-tab-summary" role="tab" aria-selected="true" aria-controls="gf-panel-summary" tabindex="0" data-gf-tab="summary">Resumen</button>
               <button type="button" id="gf-tab-activity" role="tab" aria-selected="false" aria-controls="gf-panel-activity" tabindex="-1" data-gf-tab="activity">Actividad</button>
               <button type="button" id="gf-tab-location" role="tab" aria-selected="false" aria-controls="gf-panel-location" tabindex="-1" data-gf-tab="location">Ubicación</button>
               <button type="button" id="gf-tab-alerts" role="tab" aria-selected="false" aria-controls="gf-panel-alerts" tabindex="-1" data-gf-tab="alerts">Alertas <span class="gf-alert-count" id="gf-alert-count" hidden>1</span></button>
+            </div>
             </div>
 
             <div class="gf-panels">
@@ -228,17 +232,28 @@
                 </div>
                 <div class="gf-site-section" data-gf-data="activity">
                   <div class="gf-subhead"><h4>Últimos sitios visitados</h4><button type="button" class="gf-text-button" data-gf-go="activity">Ver actividad <span aria-hidden="true">→</span></button></div>
-                  <ul class="gf-sites"><li><span class="gf-site-icon"><i class="gf-icon" data-icon="web" aria-hidden="true"></i></span><div><strong>Recetas de cocina</strong><span>recetas.example</span></div><time>10:42</time></li><li><span class="gf-site-icon"><i class="gf-icon" data-icon="web" aria-hidden="true"></i></span><div><strong>Noticias del día</strong><span>noticias.example</span></div><time>10:28</time></li></ul>
+                  <ul class="gf-sites"><li><span class="gf-site-icon"><i class="gf-icon" data-icon="web" aria-hidden="true"></i></span><div><strong>Recetas de cocina</strong><span>recetas.example</span></div><time>10:42</time></li><li><span class="gf-site-icon"><i class="gf-icon" data-icon="web" aria-hidden="true"></i></span><div><strong>Noticias del día</strong><span>noticias.example</span></div><time>10:21</time></li></ul>
                 </div>
                 <button type="button" class="gf-location-link" data-gf-go="location"><i class="gf-icon" data-icon="location" aria-hidden="true"></i><span><strong id="gf-summary-location">Ubicación compartida</strong><small id="gf-summary-location-note">En casa · actualizada hace 2 min</small></span><span aria-hidden="true">→</span></button>
                 <div class="gf-safety-line" id="gf-safety-line"><i class="gf-icon" data-icon="shield" aria-hidden="true"></i><span id="gf-safety-text">Sin alertas pendientes en este ejemplo.</span><button type="button" class="gf-text-button" id="gf-review-alert" data-gf-go="alerts" hidden>Revisar</button></div>
               </div>
 
               <div class="gf-panel" id="gf-panel-activity" role="tabpanel" aria-labelledby="gf-tab-activity" tabindex="0" hidden>
-                <div class="gf-subhead"><h4>Su día, paso a paso</h4><span class="gf-panel-label">Hoy · ejemplo</span></div>
-                <ol class="gf-timeline" data-gf-data="activity"><li><time>10:42</time><div><strong>Buscó una receta de cocina</strong><p>Visitó recetas.example con Nieto.</p></div></li><li><time>10:35</time><div><strong>Pidió ayuda con WhatsApp</strong><p>Practicó cómo crear un grupo.</p></div></li><li><time>10:28</time><div><strong>Leyó las noticias</strong><p>Visitó noticias.example.</p></div></li><li><time>10:15</time><div><strong>Activó el acompañamiento</strong><p>Comenzó a usar Nieto.</p></div></li></ol>
+                <div class="gf-activity-heading"><div><span>HOY · DATOS DE EJEMPLO</span><h4>Actividad de Mamá</h4><p>Su día con el celular, de un vistazo.</p></div><i class="gf-icon" data-icon="activity" aria-hidden="true"></i></div>
+                <div class="gf-usage" data-gf-data="screen">
+                  <div class="gf-usage-heading"><div><strong>Tiempo de pantalla</strong><span>12 min acompañada por Nieto</span></div><b>24 <small>min</small></b></div>
+                  <div class="gf-usage-app"><span>Navegador</span><span class="gf-usage-track" role="img" aria-label="14 de los 24 minutos en el navegador"><span style="width:58.333%"></span></span><strong>14 min</strong></div>
+                  <div class="gf-usage-app"><span>WhatsApp</span><span class="gf-usage-track" role="img" aria-label="10 de los 24 minutos en WhatsApp"><span style="width:41.667%"></span></span><strong>10 min</strong></div>
+                </div>
+                <div class="gf-activity-tools" data-gf-data="activity"><div class="gf-activity-filters" role="group" aria-label="Filtrar la actividad de Mamá"><button type="button" data-gf-filter="all" aria-pressed="true">Todo</button><button type="button" data-gf-filter="sites" aria-pressed="false">Sitios web</button><button type="button" data-gf-filter="help" aria-pressed="false">Con Nieto</button></div><span id="gf-activity-count">4 eventos</span></div>
+                <ol class="gf-event-list" data-gf-data="activity" aria-label="Actividad compartida de Mamá">
+                  <li data-gf-event-category="sites" id="gf-risk-event" hidden><button type="button" data-gf-event="risk"><time>10:44</time><span class="gf-event-icon is-warning"><i class="gf-icon" data-icon="shield" aria-hidden="true"></i></span><span class="gf-event-copy"><strong>Abrió un enlace sospechoso</strong><span>premios.example · Alerta de ejemplo</span></span><span class="gf-event-arrow" aria-hidden="true">›</span></button></li>
+                  <li data-gf-event-category="sites help"><button type="button" data-gf-event="recipe"><time>10:42</time><span class="gf-event-icon"><i class="gf-icon" data-icon="web" aria-hidden="true"></i></span><span class="gf-event-copy"><strong>Buscó una receta de cocina</strong><span>recetas.example · Navegador<span data-gf-data="screen"> · 8 min</span></span><small>Con la guía de Nieto</small></span><span class="gf-event-arrow" aria-hidden="true">›</span></button></li>
+                  <li data-gf-event-category="help"><button type="button" data-gf-event="whatsapp"><time>10:31</time><span class="gf-event-icon"><i class="gf-icon" data-icon="message" aria-hidden="true"></i></span><span class="gf-event-copy"><strong>Practicó cómo crear un grupo</strong><span>WhatsApp<span data-gf-data="screen"> · 10 min</span></span><small>Repitió los pasos con Nieto</small></span><span class="gf-event-arrow" aria-hidden="true">›</span></button></li>
+                  <li data-gf-event-category="sites"><button type="button" data-gf-event="news"><time>10:21</time><span class="gf-event-icon"><i class="gf-icon" data-icon="web" aria-hidden="true"></i></span><span class="gf-event-copy"><strong>Leyó las noticias</strong><span>noticias.example · Navegador<span data-gf-data="screen"> · 6 min</span></span></span><span class="gf-event-arrow" aria-hidden="true">›</span></button></li>
+                  <li data-gf-event-category="help"><button type="button" data-gf-event="session"><time>10:15</time><span class="gf-event-icon"><i class="gf-icon" data-icon="family" aria-hidden="true"></i></span><span class="gf-event-copy"><strong>Activó el acompañamiento</strong><span>Inicio de la sesión de Nieto</span></span><span class="gf-event-arrow" aria-hidden="true">›</span></button></li>
+                </ol>
                 <p class="gf-empty" data-gf-private="activity" hidden><i class="gf-icon" data-icon="lock" aria-hidden="true"></i>Mamá eligió no compartir su actividad ni sus sitios visitados.</p>
-                <div class="gf-screen-note" data-gf-data="screen"><i class="gf-icon" data-icon="activity" aria-hidden="true"></i><p><strong>24 min de pantalla hoy.</strong> 12 min acompañada por Nieto.</p></div>
                 <p class="gf-small-note">La vista propuesta muestra eventos y tiempos de uso. No es una transmisión de la pantalla ni del contenido de sus mensajes.</p>
               </div>
 
@@ -268,6 +283,21 @@
         </div>
       </div>
       <div class="wrap gf-onboarding" aria-label="Cómo se propone activar Grupo familiar"><div><span>1</span><p><strong>Invitás a tu familiar</strong>Se sumará a un grupo privado.</p></div><div><span>2</span><p><strong>Elige qué compartir</strong>Los permisos estarán en sus manos.</p></div><div><span>3</span><p><strong>Acompañan a distancia</strong>Con Nieto activo y el acceso aceptado.</p></div></div>
+      <dialog class="gf-explorer" id="gf-explorer" aria-labelledby="gf-explorer-title">
+        <div class="gf-explorer-bar"><div><img src="assets/nieto-logo.png" alt="NIETO" width="762" height="209" /><span id="gf-explorer-title">Grupo familiar · mockup</span></div><button type="button" id="gf-close-explorer" aria-label="Cerrar mockup de Grupo familiar">×</button></div>
+        <div id="gf-explorer-mount"></div>
+        <p class="gf-explorer-note">Próxima función · Martha y su actividad son ficticias. Los controles solo modifican esta demo.</p>
+      </dialog>
+      <dialog class="gf-event-dialog" id="gf-event-dialog" aria-labelledby="gf-event-title" aria-describedby="gf-event-description">
+        <div class="gf-event-dialog-top"><span>ACTIVIDAD COMPARTIDA · DEMO</span><button type="button" id="gf-close-event" aria-label="Cerrar detalle de actividad">×</button></div>
+        <div class="gf-event-person"><span class="gf-avatar" aria-hidden="true"><img src="assets/nieto-avatares.png" alt="" width="1774" height="887" decoding="async" /></span><div><strong>Mamá</strong><span>Martha · 70 años · ejemplo</span></div></div>
+        <h3 id="gf-event-title"></h3>
+        <dl class="gf-event-facts"><div><dt>Hora</dt><dd id="gf-event-time"></dd></div><div><dt>Aplicación</dt><dd id="gf-event-app"></dd></div><div><dt>Tiempo de uso</dt><dd id="gf-event-duration"></dd></div><div><dt>Sitio</dt><dd id="gf-event-site"></dd></div></dl>
+        <p id="gf-event-description"></p>
+        <div class="gf-event-guidance"><i class="gf-icon" data-icon="message" aria-hidden="true"></i><div><strong>Cómo la acompañó Nieto</strong><p id="gf-event-guidance"></p></div></div>
+        <p class="gf-event-privacy"><i class="gf-icon" data-icon="lock" aria-hidden="true"></i>Solo se comparte la actividad autorizada. No se muestran mensajes, contactos ni contraseñas.</p>
+        <button type="button" class="gf-button" id="gf-event-see-alerts" hidden>Ver la alerta de ejemplo</button>
+      </dialog>
       <dialog class="gf-voice-dialog" id="gf-voice-dialog" aria-labelledby="gf-voice-title" aria-describedby="gf-voice-intro">
         <button type="button" class="gf-dialog-close" id="gf-close-voice" aria-label="Cerrar aviso de voz">×</button>
         <span class="gf-dialog-label">GRUPO FAMILIAR · DEMO</span>

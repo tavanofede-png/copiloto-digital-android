@@ -111,4 +111,12 @@
 - Organizado el recorrido en seguir la guía, practicar y repetir, e incorporar el proceso para aplicarlo por cuenta propia.
 - Conservados el diseño, las negritas y el indicador verde animado; ajustados los iconos al contenido de los pasos.
 
+### Mockup navegable de la interfaz de Grupo familiar
+
+- Añadido «Explorar el mockup de la app» para ampliar la misma demo sin duplicar controles ni estados.
+- Incorporada la vista «Actividad de Mamá» con desglose de uso por aplicación, cronología, filtros y detalle de cada evento.
+- Añadido un evento de sitio sospechoso en el caso de alerta, con acceso a su revisión.
+- Conservados ubicación, permisos, ping y aviso de voz dentro del mockup. El diseño se adapta a escritorio y celular.
+- Mantenido el alcance acordado: datos ficticios y próxima función, sin monitorización real ni cambios en Android/backend.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.

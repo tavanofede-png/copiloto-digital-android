@@ -24,11 +24,17 @@ La sección de familias existente pasa a presentar **Grupo familiar**, con un ac
 
 ## Qué permite probar la demo
 
+- **Explorar el mockup de la app:** abre la misma interfaz en una vista ampliada, con navegación lateral en escritorio y distribución compacta en celular. Al cerrarla, la demo vuelve a su lugar y conserva sus permisos y estados.
+- **Actividad de Mamá:** desglose ilustrativo de 24 minutos de pantalla (14 de navegador y 10 de WhatsApp), con 12 minutos acompañada por Nieto. Los tiempos son ficticios.
+- **Cronología y filtros:** permite ver todos los eventos, los sitios web o las actividades con Nieto. Una actividad puede pertenecer a ambas categorías.
+- **Detalle de cada evento:** hora, aplicación, sitio de ejemplo y tiempo compartido, más una explicación de cómo la acompañó Nieto. No se muestran conversaciones ni pantallas privadas.
+- **Caso inseguro:** incorpora un evento de alerta a la cronología y permite pasar de su detalle a la pestaña Alertas.
 - Pestañas accesibles con teclado: flechas, Inicio y Fin.
 - Casos «Uso normal», «Sitio inseguro» y «Nieto desactivado».
 - Aviso dentro de la página cuando se simula un enlace inseguro.
 - Revisión de una alerta y preferencias de notificación del ejemplo.
 - Permisos simulados que ocultan los datos correspondientes.
+- El permiso de pantalla también controla las duraciones en la cronología y en el detalle; el de actividad oculta los eventos y los filtros.
 - Ping y aviso de voz editable de hasta 180 caracteres, con vista previa de recepción.
 - Avisos pendientes cuando Nieto está desactivado; al reactivarlo, la simulación los muestra como recibidos.
 - Permiso separado para recibir pings/voz. Al retirarlo, se deshabilitan ambas acciones y se limpia la vista previa.

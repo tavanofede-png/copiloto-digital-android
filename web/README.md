@@ -24,6 +24,8 @@ Se conserva la identidad del HTML original. Las ediciones aprobadas incluyen los
 
 La demo de Grupo familiar permite recorrer Resumen, Actividad, Ubicación y Alertas, cambiar situaciones y simular permisos. También incluye un ping y un aviso de voz editable, con vista previa y estados de entrega simulados. La escucha opcional utiliza una voz local en español del navegador, cuando está disponible. No monitorea dispositivos, solicita acceso al GPS ni envía mensajes reales. Las decisiones de producto y el trabajo pendiente para Android/backend están en [`docs/GRUPO-FAMILIAR.md`](../docs/GRUPO-FAMILIAR.md).
 
+«Explorar el mockup de la app» amplía la demo y abre la actividad de Mamá. Incluye tiempos por aplicación, filtros de sitios/ayuda de Nieto y detalles de los eventos. La vista ampliada y la página comparten el mismo estado; al cerrar se conserva la selección y los permisos.
+
 No realizar cambios de diseño, colores, contenido, secciones ni funciones sin un pedido explícito del usuario.
 
 ## Publicar

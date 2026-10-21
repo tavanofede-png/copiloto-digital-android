@@ -12,6 +12,7 @@
     notifications: true,
     sharing: { activity: true, screen: true, location: true, alerts: true, contact: true },
     message: null,
+    activityFilter: 'all',
   };
   const tabs = all('[data-gf-tab]');
   const text = (selector, value) => { get(selector).textContent = value; };
@@ -19,6 +20,50 @@
   const voiceInput = get('#gf-voice-text');
   const speech = 'speechSynthesis' in window ? window.speechSynthesis : null;
   let activeSpeech = null;
+  const explorer = get('#gf-explorer');
+  const demo = get('#familia-demo');
+  const demoMarker = document.createComment('family-demo-home');
+  demo.before(demoMarker);
+  const eventDialog = get('#gf-event-dialog');
+  const wideMockup = window.matchMedia('(min-width:851px)');
+  const activityEvents = {
+    recipe: { title:'Buscó una receta de cocina', time:'10:42', app:'Navegador', duration:'8 min', site:'recetas.example', description:'En este ejemplo, Mamá abrió una receta de cocina y consultó cómo encontrar sus ingredientes.', guidance:'Nieto le explicó dónde tocar para seguir leyendo. Mamá realizó cada paso en su propio celular.' },
+    whatsapp: { title:'Practicó cómo crear un grupo', time:'10:31', app:'WhatsApp', duration:'10 min', site:'No aplica', description:'Mamá practicó la creación de un grupo en WhatsApp. Este registro de ejemplo muestra la tarea realizada.', guidance:'La acompañó paso a paso y repitió las instrucciones. No se comparten contactos, nombres de grupos ni mensajes.' },
+    news: { title:'Leyó las noticias', time:'10:21', app:'Navegador', duration:'6 min', site:'noticias.example', description:'Mamá visitó un sitio de noticias. Se muestra el dominio de ejemplo y el tiempo de uso compartido.', guidance:'No pidió ayuda de Nieto en este evento de ejemplo.' },
+    session: { title:'Activó el acompañamiento', time:'10:15', app:'Nieto', duration:'No aplica', site:'No aplica', description:'En esta simulación, Mamá inició el acompañamiento y mantuvo habilitados los permisos elegidos para su grupo.', guidance:'Quedó disponible para responder sus preguntas y guiarla con paciencia.' },
+    risk: { title:'Abrió un enlace sospechoso', time:'10:44', app:'Navegador', duration:'No disponible', site:'premios.example', description:'El escenario de prueba incluye un sitio potencialmente inseguro. Esta alerta representa un posible riesgo; no confirma un fraude.', guidance:'Le sugirió no continuar y generó una alerta de ejemplo para que su familia pueda acompañarla.' },
+  };
+
+  function updateMockupOrientation() {
+    get('.gf-tabs').setAttribute('aria-orientation', explorer.open && wideMockup.matches ? 'vertical' : 'horizontal');
+  }
+
+  function renderActivity() {
+    let count = 0;
+    for (const control of all('[data-gf-filter]')) control.setAttribute('aria-pressed', String(control.dataset.gfFilter === state.activityFilter));
+    for (const item of all('[data-gf-event-category]')) {
+      const riskAllowed = item.id !== 'gf-risk-event' || (state.scenario === 'alert' && state.sharing.alerts);
+      const visible = riskAllowed && (state.activityFilter === 'all' || item.dataset.gfEventCategory.split(' ').includes(state.activityFilter));
+      item.hidden = !visible;
+      if (visible) count++;
+    }
+    text('#gf-activity-count', count + (count === 1 ? ' evento' : ' eventos'));
+  }
+
+  function openEvent(name) {
+    const event = activityEvents[name];
+    if (!event || !state.sharing.activity || (name === 'risk' && !state.sharing.alerts)) return;
+    text('#gf-event-title', event.title);
+    text('#gf-event-time', event.time);
+    text('#gf-event-app', event.app);
+    text('#gf-event-duration', state.sharing.screen ? event.duration : 'No compartido');
+    text('#gf-event-site', event.site);
+    text('#gf-event-description', event.description);
+    text('#gf-event-guidance', event.guidance);
+    get('#gf-event-see-alerts').hidden = name !== 'risk';
+    eventDialog.showModal();
+    get('#gf-close-event').focus();
+  }
 
   function audioStatus(message) {
     for (const output of all('[data-gf-audio-status]')) output.textContent = message;
@@ -120,6 +165,7 @@
       get('#' + tab.getAttribute('aria-controls')).hidden = !selected;
       if (selected && focus) tab.focus({ preventScroll: true });
     }
+    if (explorer.open) explorer.scrollTop = 0;
   }
 
   function render() {
@@ -128,6 +174,7 @@
     for (const button of all('[data-gf-scenario]')) {
       button.setAttribute('aria-pressed', String(button.dataset.gfScenario === state.scenario));
     }
+    get('#gf-scenario-select').value = state.scenario;
     get('#gf-session').classList.toggle('is-offline', !active);
     text('#gf-session-label', active ? 'Nieto activado' : 'Nieto desactivado');
     get('#gf-session-note').hidden = active;
@@ -165,6 +212,7 @@
     get('#gf-simulate-alert').disabled = !active;
     get('#gf-simulate-alert').textContent = active ? 'Probar una alerta de ejemplo →' : 'Activá Nieto en el ejemplo para probar una alerta';
     get('#gf-notifications').checked = state.notifications;
+    renderActivity();
     renderContact();
   }
 
@@ -192,8 +240,8 @@
     tab.addEventListener('keydown', event => {
       const index = tabs.indexOf(tab);
       let next;
-      if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-      else if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % tabs.length;
+      else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index - 1 + tabs.length) % tabs.length;
       else if (event.key === 'Home') next = 0;
       else if (event.key === 'End') next = tabs.length - 1;
       else return;
@@ -202,7 +250,34 @@
     });
   }
   for (const button of all('[data-gf-go]')) button.addEventListener('click', () => selectTab(button.dataset.gfGo, true));
+  get('#gf-open-mockup').addEventListener('click', () => {
+    get('#gf-explorer-mount').append(demo);
+    explorer.showModal();
+    document.body.classList.add('gf-explorer-open');
+    updateMockupOrientation();
+    selectTab('activity', true);
+  });
+  get('#gf-close-explorer').addEventListener('click', () => explorer.close());
+  explorer.addEventListener('close', () => {
+    stopAudio('');
+    demoMarker.after(demo);
+    document.body.classList.remove('gf-explorer-open');
+    updateMockupOrientation();
+    get('#gf-open-mockup').focus({ preventScroll:true });
+  });
+  wideMockup.addEventListener('change', updateMockupOrientation);
+  for (const button of all('[data-gf-filter]')) button.addEventListener('click', () => {
+    state.activityFilter = button.dataset.gfFilter;
+    renderActivity();
+  });
+  for (const button of all('[data-gf-event]')) button.addEventListener('click', () => openEvent(button.dataset.gfEvent));
+  get('#gf-close-event').addEventListener('click', () => eventDialog.close());
+  get('#gf-event-see-alerts').addEventListener('click', () => {
+    eventDialog.close();
+    selectTab('alerts', true);
+  });
   for (const button of all('[data-gf-scenario]')) button.addEventListener('click', () => useScenario(button.dataset.gfScenario));
+  get('#gf-scenario-select').addEventListener('change', event => useScenario(event.target.value));
   get('#gf-mark-reviewed').addEventListener('click', () => {
     state.pendingAlert = false;
     state.reviewed = true;
