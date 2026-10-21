@@ -10,10 +10,99 @@
     pendingAlert: false,
     reviewed: false,
     notifications: true,
-    sharing: { activity: true, screen: true, location: true, alerts: true },
+    sharing: { activity: true, screen: true, location: true, alerts: true, contact: true },
+    message: null,
   };
   const tabs = all('[data-gf-tab]');
   const text = (selector, value) => { get(selector).textContent = value; };
+  const voiceDialog = get('#gf-voice-dialog');
+  const voiceInput = get('#gf-voice-text');
+  const speech = 'speechSynthesis' in window ? window.speechSynthesis : null;
+  let activeSpeech = null;
+
+  function audioStatus(message) {
+    for (const output of all('[data-gf-audio-status]')) output.textContent = message;
+  }
+
+  function stopAudio(message) {
+    const wasSpeaking = activeSpeech !== null;
+    activeSpeech = null;
+    if (speech && wasSpeaking) speech.cancel();
+    for (const button of all('[data-gf-play]')) {
+      button.classList.remove('is-playing');
+      button.setAttribute('aria-pressed', 'false');
+      button.querySelector('span').textContent = 'Escuchar ejemplo';
+    }
+    if (message !== undefined) audioStatus(message);
+  }
+
+  function playAudio(button) {
+    if (activeSpeech && activeSpeech.button === button) {
+      stopAudio('Reproducción detenida.');
+      return;
+    }
+    stopAudio('');
+    const message = button.dataset.gfPlay === 'composer' ? voiceInput.value.trim() : state.message?.content;
+    if (!message) return;
+    if (!speech || !('SpeechSynthesisUtterance' in window)) {
+      audioStatus('La reproducción de voz no está disponible en este navegador. El mensaje sigue visible para leerlo.');
+      return;
+    }
+    const voice = speech.getVoices().find(item => item.localService && item.lang.toLowerCase().startsWith('es'));
+    if (!voice) {
+      audioStatus('Este navegador no tiene una voz local en español disponible. Podés leer el ejemplo y simular el envío.');
+      return;
+    }
+    const utterance = new SpeechSynthesisUtterance(message);
+    utterance.voice = voice;
+    utterance.lang = voice.lang;
+    utterance.rate = 0.95;
+    activeSpeech = { utterance, button };
+    button.setAttribute('aria-pressed', 'true');
+    button.querySelector('span').textContent = 'Detener audio';
+    audioStatus('Preparando el ejemplo de voz en este dispositivo…');
+    utterance.onstart = () => {
+      if (activeSpeech?.utterance !== utterance) return;
+      button.classList.add('is-playing');
+      audioStatus('Reproduciendo el ejemplo acá. No se envía a ningún teléfono.');
+    };
+    utterance.onend = () => {
+      if (activeSpeech?.utterance === utterance) stopAudio('Ejemplo de audio finalizado.');
+    };
+    utterance.onerror = () => {
+      if (activeSpeech?.utterance === utterance) stopAudio('No se pudo reproducir el audio. Podés leer el mensaje y simular su envío.');
+    };
+    try { speech.speak(utterance); }
+    catch { stopAudio('No se pudo reproducir el audio en este navegador.'); }
+  }
+
+  function renderContact() {
+    get('#gf-send-ping').disabled = !state.sharing.contact;
+    get('#gf-open-voice').disabled = !state.sharing.contact;
+    get('#gf-contact-permission-note').hidden = state.sharing.contact;
+    get('#gf-contact-preview').hidden = !state.message || !state.sharing.contact;
+    text('#gf-voice-send-note', state.scenario === 'offline'
+      ? 'Nieto está desactivado en el ejemplo. El aviso quedará pendiente hasta que vuelva a activarse.'
+      : 'Se mostrará una vista previa. No se contactará ningún teléfono.');
+    if (!state.message) return;
+    const queued = state.message.status === 'queued';
+    text('#gf-contact-message-title', state.message.type === 'voice' ? 'Un aviso con la voz de Nieto' : 'Un ping de tu hijo');
+    text('#gf-contact-message-text', state.message.content);
+    text('#gf-contact-status', queued ? 'Pendiente · Nieto desactivado · demo' : 'Recibido por Mamá · demo');
+    get('#gf-contact-status').classList.toggle('is-queued', queued);
+    get('#gf-contact-play').hidden = state.message.type !== 'voice';
+  }
+
+  function sendContact(type, content) {
+    if (!state.sharing.contact) return;
+    stopAudio('');
+    const queued = state.scenario === 'offline';
+    state.message = { type, content, status: queued ? 'queued' : 'delivered' };
+    renderContact();
+    announce(queued
+      ? 'Aviso de ejemplo pendiente. Se mostrará como recibido cuando actives Nieto en la simulación. No se envió ningún mensaje real.'
+      : 'Vista previa lista: así recibiría Mamá el aviso. No se contactó a ningún teléfono.');
+  }
 
   function announce(message) {
     const output = get('#gf-announcement');
@@ -76,20 +165,26 @@
     get('#gf-simulate-alert').disabled = !active;
     get('#gf-simulate-alert').textContent = active ? 'Probar una alerta de ejemplo →' : 'Activá Nieto en el ejemplo para probar una alerta';
     get('#gf-notifications').checked = state.notifications;
+    renderContact();
   }
 
   function useScenario(name) {
+    const deliverQueued = name !== 'offline' && state.sharing.contact && state.message?.status === 'queued';
     state.scenario = name;
     state.pendingAlert = name === 'alert';
     state.reviewed = false;
+    if (deliverQueued) state.message.status = 'delivered';
     render();
-    if (name === 'offline') announce('Ejemplo: Nieto se desactivó. La ubicación y la actividad no reciben nuevas actualizaciones.');
+    let message;
+    if (name === 'offline') message = 'Ejemplo: Nieto se desactivó. La ubicación y la actividad no reciben nuevas actualizaciones.';
     else if (name === 'alert' && state.sharing.alerts) {
-      announce(state.notifications
+      message = state.notifications
         ? 'Notificación de ejemplo: Mamá abrió un enlace sospechoso. Podés revisarlo en Alertas. No se envió ninguna notificación real.'
-        : 'Alerta de ejemplo disponible en la pestaña Alertas. Los avisos están desactivados en esta demostración.');
-    } else if (name === 'alert') announce('Mamá no comparte sus alertas de seguridad en este ejemplo.');
-    else announce('Ejemplo: Nieto activado. Se muestran datos ficticios y los permisos elegidos.');
+        : 'Alerta de ejemplo disponible en la pestaña Alertas. Los avisos están desactivados en esta demostración.';
+    } else if (name === 'alert') message = 'Mamá no comparte sus alertas de seguridad en este ejemplo.';
+    else message = 'Ejemplo: Nieto activado. Se muestran datos ficticios y los permisos elegidos.';
+    if (deliverQueued) message += ' El aviso pendiente ahora figura como recibido en esta demo.';
+    announce(message);
   }
 
   for (const tab of tabs) {
@@ -131,10 +226,47 @@
   for (const control of all('[data-gf-permission]')) {
     control.addEventListener('change', event => {
       state.sharing[event.target.dataset.gfPermission] = event.target.checked;
+      if (event.target.dataset.gfPermission === 'contact' && !event.target.checked) {
+        state.message = null;
+        stopAudio('');
+        if (voiceDialog.open) voiceDialog.close();
+      }
       render();
       announce('Permisos actualizados solo en este ejemplo. Tu familiar mantendrá el control desde su propio celular.');
     });
   }
+  get('#gf-send-ping').addEventListener('click', () => sendContact('ping', 'Hola Martha, tu hijo te mandó un ping para estar cerca.'));
+  get('#gf-open-voice').addEventListener('click', () => {
+    if (!state.sharing.contact) return;
+    stopAudio('');
+    renderContact();
+    voiceDialog.showModal();
+    voiceInput.focus();
+  });
+  get('#gf-close-contact-preview').addEventListener('click', () => {
+    stopAudio('');
+    state.message = null;
+    renderContact();
+    get('#gf-send-ping').focus({ preventScroll: true });
+  });
+  for (const button of all('[data-gf-play]')) button.addEventListener('click', () => playAudio(button));
+  for (const button of [get('#gf-close-voice'), get('#gf-cancel-voice')]) button.addEventListener('click', () => voiceDialog.close());
+  voiceDialog.addEventListener('close', () => stopAudio(''));
+  voiceInput.addEventListener('input', () => {
+    stopAudio('');
+    text('#gf-voice-count', voiceInput.value.length + '/180');
+    get('#gf-submit-voice').disabled = !voiceInput.value.trim();
+  });
+  get('#gf-voice-form').addEventListener('submit', event => {
+    event.preventDefault();
+    const content = voiceInput.value.trim();
+    if (!content || !state.sharing.contact) return;
+    sendContact('voice', content);
+    voiceDialog.close();
+  });
+  if (speech) speech.getVoices();
+  window.addEventListener('pagehide', () => stopAudio());
+  text('#gf-voice-count', voiceInput.value.length + '/180');
   render();
   selectTab('summary');
 })();

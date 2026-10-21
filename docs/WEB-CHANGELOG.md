@@ -80,4 +80,12 @@
 - Documentadas las decisiones de producto y los límites de la implementación en `docs/GRUPO-FAMILIAR.md`.
 - Esta entrega es una demostración web; no monitorea dispositivos ni modifica el APK o backend.
 
+### Grupo familiar: ping y aviso de voz
+
+- Añadidas las acciones «Enviar ping» y «Aviso de voz» dentro del perfil de Mamá.
+- Incorporado el ejemplo pedido: «Nieto, avisale a mamá que estoy yendo» → «Hola Martha, tu hijo está por llegar».
+- Añadido editor con vista previa, escucha opcional mediante voz local en español y controles de teclado.
+- Simulados los estados recibido/pendiente y un permiso independiente para recibir estos avisos.
+- Conservado el alcance acordado: próxima función con demo de ejemplo, sin mensajes reales ni cambios en Android/backend.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.

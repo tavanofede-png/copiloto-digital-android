@@ -22,7 +22,7 @@ Abrir `http://127.0.0.1:4173`. No hace falta instalar dependencias ni compilar. 
 
 Se conserva la identidad del HTML original. Las ediciones aprobadas incluyen los textos para el público de 65 a 99 años, las cajas con diálogos y avatares de «Qué es», y la sección Grupo familiar como próxima función con datos ficticios.
 
-La demo de Grupo familiar permite recorrer Resumen, Actividad, Ubicación y Alertas, cambiar situaciones y simular permisos. No monitorea dispositivos ni solicita acceso al GPS. Las decisiones de producto y el trabajo pendiente para Android/backend están en [`docs/GRUPO-FAMILIAR.md`](../docs/GRUPO-FAMILIAR.md).
+La demo de Grupo familiar permite recorrer Resumen, Actividad, Ubicación y Alertas, cambiar situaciones y simular permisos. También incluye un ping y un aviso de voz editable, con vista previa y estados de entrega simulados. La escucha opcional utiliza una voz local en español del navegador, cuando está disponible. No monitorea dispositivos, solicita acceso al GPS ni envía mensajes reales. Las decisiones de producto y el trabajo pendiente para Android/backend están en [`docs/GRUPO-FAMILIAR.md`](../docs/GRUPO-FAMILIAR.md).
 
 No realizar cambios de diseño, colores, contenido, secciones ni funciones sin un pedido explícito del usuario.
 

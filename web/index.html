@@ -182,6 +182,7 @@
             <li><span class="gf-feature-icon"><i class="gf-icon" data-icon="activity" aria-hidden="true"></i></span><div><strong>Cómo usa su pantalla</strong><p>Actividad y tiempos de uso, de un vistazo.</p></div></li>
             <li><span class="gf-feature-icon"><i class="gf-icon" data-icon="location" aria-hidden="true"></i></span><div><strong>Su ubicación compartida</strong><p>Mientras Nieto esté activo y tu familiar elija compartirla.</p></div></li>
             <li><span class="gf-feature-icon"><i class="gf-icon" data-icon="shield" aria-hidden="true"></i></span><div><strong>Alertas para acompañar a tiempo</strong><p>Ante sitios sospechosos o actividades potencialmente inseguras.</p></div></li>
+            <li><span class="gf-feature-icon"><i class="gf-icon" data-icon="voice" aria-hidden="true"></i></span><div><strong>Un ping o un aviso con voz</strong><p>Decile «Nieto, avisale a mamá que estoy yendo» y Nieto podrá contárselo en voz alta.</p></div></li>
           </ul>
           <div class="gf-trust"><i class="gf-icon" data-icon="lock" aria-hidden="true"></i><p><strong>Tu familiar decide qué compartir.</strong> Podrá aceptar la invitación, elegir sus permisos y pausar el acceso.</p></div>
         </div>
@@ -194,6 +195,14 @@
               <span class="gf-avatar" aria-hidden="true"><img src="assets/nieto-avatares.png" alt="" width="1774" height="887" loading="lazy" decoding="async" /></span>
               <div class="gf-member-copy"><h3>Mamá</h3><p>70 años</p></div>
               <span class="gf-session" id="gf-session"><span aria-hidden="true"></span><span id="gf-session-label">Nieto activado</span></span>
+            </div>
+            <div class="gf-contact-actions" role="group" aria-label="Probar un aviso para Mamá"><button type="button" id="gf-send-ping"><i class="gf-icon" data-icon="bell" aria-hidden="true"></i>Enviar ping</button><button type="button" id="gf-open-voice"><i class="gf-icon" data-icon="voice" aria-hidden="true"></i>Aviso de voz</button></div>
+            <p class="gf-contact-permission-note" id="gf-contact-permission-note" hidden>Mamá eligió no recibir pings ni avisos de voz.</p>
+            <div class="gf-contact-preview" id="gf-contact-preview" hidden>
+              <div class="gf-contact-preview-top"><span>Así lo recibiría Mamá · demo</span><button type="button" id="gf-close-contact-preview" aria-label="Cerrar la vista previa del aviso">×</button></div>
+              <div class="gf-contact-message"><span class="gf-contact-nieto" aria-hidden="true"><img src="assets/nieto-avatares.png" alt="" width="1774" height="887" decoding="async" /></span><div><strong id="gf-contact-message-title">Un aviso de tu familia</strong><p id="gf-contact-message-text"></p></div></div>
+              <div class="gf-contact-status-row"><span id="gf-contact-status"></span><button type="button" class="gf-text-button" id="gf-contact-play" data-gf-play="preview" aria-pressed="false"><i class="gf-icon" data-icon="voice" aria-hidden="true"></i><span>Escuchar ejemplo</span></button></div>
+              <p class="gf-audio-status" data-gf-audio-status role="status" aria-live="polite"></p>
             </div>
             <div class="gf-scenarios" role="group" aria-label="Elegí una situación para probar la demo">
               <span>Probá un caso</span>
@@ -248,13 +257,29 @@
             </div>
 
             <div class="gf-sharing"><span><i class="gf-icon" data-icon="lock" aria-hidden="true"></i>Compartido por Mamá</span><button type="button" class="gf-text-button" id="gf-permissions-button" aria-controls="gf-permissions" aria-expanded="false">Ver permisos</button></div>
-            <fieldset class="gf-permissions" id="gf-permissions" hidden><legend>En este ejemplo, Mamá elige qué compartir</legend><label><input type="checkbox" data-gf-permission="activity" checked /><span>Actividad y sitios visitados</span></label><label><input type="checkbox" data-gf-permission="screen" checked /><span>Tiempos de uso de pantalla</span></label><label><input type="checkbox" data-gf-permission="location" checked /><span>Ubicación mientras Nieto está activo</span></label><label><input type="checkbox" data-gf-permission="alerts" checked /><span>Avisos de seguridad al grupo</span></label><p>En la app, estos permisos los otorgará o retirará tu familiar desde su propio celular.</p></fieldset>
+            <fieldset class="gf-permissions" id="gf-permissions" hidden><legend>En este ejemplo, Mamá elige qué comparte y qué recibe</legend><label><input type="checkbox" data-gf-permission="activity" checked /><span>Actividad y sitios visitados</span></label><label><input type="checkbox" data-gf-permission="screen" checked /><span>Tiempos de uso de pantalla</span></label><label><input type="checkbox" data-gf-permission="location" checked /><span>Ubicación mientras Nieto está activo</span></label><label><input type="checkbox" data-gf-permission="alerts" checked /><span>Avisos de seguridad al grupo</span></label><label><input type="checkbox" data-gf-permission="contact" checked /><span>Recibir pings y avisos de voz de la familia</span></label><p>En la app, estos permisos los otorgará o retirará tu familiar desde su propio celular.</p></fieldset>
             <p class="gf-announcement" id="gf-announcement" role="status" aria-live="polite" hidden></p>
           </div>
           <p class="gf-demo-note">Demo interactiva con datos ficticios. Esta función está en desarrollo: la vista no monitorea dispositivos, consulta el GPS ni envía notificaciones reales.</p>
         </div>
       </div>
       <div class="wrap gf-onboarding" aria-label="Cómo se propone activar Grupo familiar"><div><span>1</span><p><strong>Invitás a tu familiar</strong>Se sumará a un grupo privado.</p></div><div><span>2</span><p><strong>Elige qué compartir</strong>Los permisos estarán en sus manos.</p></div><div><span>3</span><p><strong>Acompañan a distancia</strong>Con Nieto activo y el acceso aceptado.</p></div></div>
+      <dialog class="gf-voice-dialog" id="gf-voice-dialog" aria-labelledby="gf-voice-title" aria-describedby="gf-voice-intro">
+        <button type="button" class="gf-dialog-close" id="gf-close-voice" aria-label="Cerrar aviso de voz">×</button>
+        <span class="gf-dialog-label">GRUPO FAMILIAR · DEMO</span>
+        <h3 id="gf-voice-title">Que Nieto se lo diga por vos.</h3>
+        <p id="gf-voice-intro">Por ejemplo: «Nieto, avisale a mamá que estoy yendo».</p>
+        <div class="gf-voice-recipient"><span class="gf-avatar" aria-hidden="true"><img src="assets/nieto-avatares.png" alt="" width="1774" height="887" decoding="async" /></span><div><strong>Para Mamá</strong><span>Martha · persona ficticia del ejemplo</span></div></div>
+        <form id="gf-voice-form">
+          <label for="gf-voice-text">Mamá escucharía</label>
+          <textarea id="gf-voice-text" rows="3" maxlength="180" required>Hola Martha, tu hijo está por llegar.</textarea>
+          <div class="gf-voice-editor-footer"><span>Podés editar el aviso.</span><output id="gf-voice-count" for="gf-voice-text">37/180</output></div>
+          <button type="button" class="gf-voice-listen" data-gf-play="composer" aria-pressed="false"><i class="gf-icon" data-icon="voice" aria-hidden="true"></i><span>Escuchar ejemplo</span><span class="gf-audio-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button>
+          <p class="gf-audio-status" data-gf-audio-status role="status" aria-live="polite"></p>
+          <div class="gf-voice-send-note" id="gf-voice-send-note">Se mostrará una vista previa. No se contactará ningún teléfono.</div>
+          <div class="gf-dialog-actions"><button type="button" class="gf-dialog-cancel" id="gf-cancel-voice">Cancelar</button><button type="submit" class="gf-button" id="gf-submit-voice"><i class="gf-icon" data-icon="message" aria-hidden="true"></i>Simular envío</button></div>
+        </form>
+      </dialog>
     </section>
 
     <section class="section" id="descargar">
