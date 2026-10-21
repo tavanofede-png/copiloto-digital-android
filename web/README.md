@@ -26,6 +26,8 @@ La demo de Grupo familiar permite recorrer Resumen, Actividad, Ubicación y Aler
 
 «Explorar el mockup de la app» amplía la demo y abre la actividad de Mamá. Incluye tiempos por aplicación, filtros de sitios/ayuda de Nieto y detalles de los eventos. La vista ampliada y la página comparten el mismo estado; al cerrar se conserva la selección y los permisos.
 
+El CTA final «Descargá Nieto» enlaza el APK de prueba de la release `v0.2.0` publicada en GitHub. Se indica Android 8 o superior y la necesidad de un código de conexión. Al publicar otra versión, actualizar el enlace y el número de versión juntos.
+
 No realizar cambios de diseño, colores, contenido, secciones ni funciones sin un pedido explícito del usuario.
 
 ## Publicar

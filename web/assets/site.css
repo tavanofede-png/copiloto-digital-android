@@ -207,6 +207,12 @@
     .cta-band .note{font-size:14px;color:var(--muted);margin-top:18px;font-weight:700}
     .cta-band h2{margin-top:16px}
     .cta-band .hero-actions{justify-content:center;margin-top:24px}
+    .download-help{max-width:600px;margin:20px auto 0;padding-top:16px;border-top:1px solid var(--line);text-align:left}
+    .download-help summary{color:var(--navy);font-size:14px;font-weight:800;cursor:pointer;text-align:center;list-style-position:inside}
+    .download-help summary:hover{text-decoration:underline;text-underline-offset:3px}
+    .download-help ol{font-size:15px;line-height:1.7;margin:16px 0 0;padding-left:24px;color:var(--text)}
+    .download-help li+li{margin-top:8px}
+    .download-help strong{color:var(--navy);font-weight:750}
 
     .footer{padding:8px 0 36px;color:var(--muted);font-size:15px}
     .footer-row{display:flex;justify-content:space-between;align-items:center;gap:20px;border-top:1px solid var(--line);padding-top:26px;padding-right:112px}

@@ -131,4 +131,11 @@
 - Caja 3: «De Asistente a Tutor».
 - Conservados los diálogos, avatares, iconos y textos explicativos.
 
+### CTA final de descarga de Nieto
+
+- Reemplazada la sección «Próximamente» por «Descargá Nieto», con un CTA principal de descarga para Android.
+- Enlazado el APK publicado `copiloto-0.2.0-debug.apk` de la release `v0.2.0`, verificado mediante la API de GitHub.
+- Eliminados el correo de ejemplo y el CTA de novedades.
+- Añadidas la indicación de versión de prueba, compatibilidad con Android 8+, requisito de código de conexión e instrucciones de instalación.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
