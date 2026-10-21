@@ -58,4 +58,11 @@
 - Mejoradas las jerarquías, el espaciado y las respuestas visuales al pasar el puntero o usar el teclado, conservando la paleta.
 - Añadido «Ver ejemplo de respuesta» desplegable en cada caja. Son ejemplos preparados, identificados como tales.
 
+### Avatares entregados por el usuario
+
+- Integrada la imagen original de los dos perfiles en `web/assets/nieto-avatares.png`.
+- Reemplazados los círculos de las preguntas por el perfil de la abuela.
+- Añadido el perfil del nieto a las respuestas de ejemplo desplegables.
+- Seleccionado cada perfil mediante CSS, conservando el archivo de imagen recibido.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.

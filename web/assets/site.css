@@ -285,10 +285,10 @@
       background:var(--blue-soft);border-radius:2px;transform:rotate(45deg);
     }
     #que-es .dialogue-avatar{
-      flex:0 0 36px;width:36px;height:36px;overflow:hidden;border-radius:50%;
+      flex:0 0 42px;width:42px;height:42px;overflow:hidden;border-radius:50%;
       background:var(--sky);border:3px solid white;box-shadow:0 0 0 1px rgba(59,130,246,.12);
     }
-    #que-es .dialogue-avatar img{width:100%;height:100%;object-fit:cover}
+    #que-es .dialogue-avatar img{width:100%;height:100%;object-fit:cover;object-position:right center;transform:scale(1.1)}
     #que-es .dialogue-bubble p{min-width:0;color:var(--navy);font-size:17px;line-height:1.5;margin:0}
     #que-es .dialogue-bubble strong{font-weight:850}
     #que-es .benefit-description{margin:0 0 22px;font-size:18px;line-height:1.6}
@@ -303,7 +303,9 @@
     #que-es .benefit-example summary:hover,#que-es .benefit-example[open] summary{color:var(--blue)}
     #que-es .benefit-example[open] summary::after{content:"−"}
     #que-es .benefit-answer{padding:18px 0 2px}
-    #que-es .benefit-answer > span{display:block;color:var(--blue);font-size:13px;font-weight:800;margin-bottom:8px}
+    #que-es .benefit-answer-profile{display:flex;align-items:center;gap:10px;color:var(--blue);font-size:13px;font-weight:800;margin-bottom:12px}
+    #que-es .answer-avatar{display:block;flex:0 0 36px;width:36px;height:36px;overflow:hidden;border-radius:50%;background:var(--blue-soft)}
+    #que-es .answer-avatar img{width:100%;height:100%;object-fit:cover;object-position:left center;transform:scale(1.1)}
     #que-es .benefit-answer p{font-size:16px;line-height:1.6;margin:0}
     @media(max-width:1100px) and (min-width:981px){#que-es .card{padding:24px}#que-es .benefit-header{min-height:100px}}
     @media(max-width:980px){#que-es .benefit-header,#que-es .dialogue-bubble{min-height:0}}
