@@ -98,4 +98,10 @@
 - Alineado Grupo familiar al mismo sistema de encabezado y espaciado, conservando sus interacciones y la indicación de próxima función.
 - Unificados los iconos de botones, estados de interacción y ayuda flotante. Corregido el ajuste de títulos en pantallas de 320 px.
 
+### Indicador verde animado en todos los pretítulos
+
+- Cambiado el punto de los seis pretítulos a verde, incluido «Tu nieto, siempre cerca».
+- Añadido un pulso titilante suave de 1,8 segundos, compartido por todas las secciones y sin desplazar el contenido.
+- Conservado el indicador verde estático cuando el dispositivo solicita movimiento reducido.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
