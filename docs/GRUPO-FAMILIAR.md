@@ -1,6 +1,6 @@
 # Grupo familiar: propuesta de producto y UI/UX
 
-Estado acordado con el usuario: **próxima función con una demostración de ejemplo**. La página no afirma que ya esté disponible en el APK. Esta entrega modifica la web; no incorpora monitorización real al código Android ni al backend.
+Alcance técnico: **prototipo web interactivo**. Por pedido posterior del usuario, la interfaz adopta una presentación de producto y omite etiquetas de demostración y aclaraciones de implementación. Esta edición modifica textos y estados locales de la web; no incorpora monitorización real al código Android ni al backend.
 
 ## Dónde se integra
 
@@ -24,23 +24,23 @@ La sección de familias existente pasa a presentar **Grupo familiar**, con un ac
 
 ## Qué permite probar la demo
 
-- **Explorar el mockup de la app:** abre la misma interfaz en una vista ampliada, con navegación lateral en escritorio y distribución compacta en celular. Al cerrarla, la demo vuelve a su lugar y conserva sus permisos y estados.
+- **Abrir Grupo familiar:** abre la misma interfaz en una vista ampliada, con navegación lateral en escritorio y distribución compacta en celular. Al cerrarla, la vista vuelve a su lugar y conserva sus permisos y estados.
 - **Actividad de Mamá:** desglose ilustrativo de 24 minutos de pantalla (14 de navegador y 10 de WhatsApp), con 12 minutos acompañada por Nieto. Los tiempos son ficticios.
 - **Cronología y filtros:** permite ver todos los eventos, los sitios web o las actividades con Nieto. Una actividad puede pertenecer a ambas categorías.
 - **Detalle de cada evento:** hora, aplicación, sitio de ejemplo y tiempo compartido, más una explicación de cómo la acompañó Nieto. No se muestran conversaciones ni pantallas privadas.
 - **Caso inseguro:** incorpora un evento de alerta a la cronología y permite pasar de su detalle a la pestaña Alertas.
 - Pestañas accesibles con teclado: flechas, Inicio y Fin.
-- Casos «Uso normal», «Sitio inseguro» y «Nieto desactivado».
+- Estados internos «Uso normal», «Sitio inseguro» y «Nieto desactivado». Los selectores de escenarios se ocultan en la presentación de producto; el estado inicial incluye una alerta pendiente para recorrer su revisión.
 - Aviso dentro de la página cuando se simula un enlace inseguro.
 - Revisión de una alerta y preferencias de notificación del ejemplo.
 - Permisos simulados que ocultan los datos correspondientes.
 - El permiso de pantalla también controla las duraciones en la cronología y en el detalle; el de actividad oculta los eventos y los filtros.
 - Ping y aviso de voz editable de hasta 180 caracteres, con vista previa de recepción.
-- Avisos pendientes cuando Nieto está desactivado; al reactivarlo, la simulación los muestra como recibidos.
+- Avisos pendientes cuando Nieto está desactivado; al reactivarlo, la interfaz los muestra como preparados. No confirma una recepción externa.
 - Permiso separado para recibir pings/voz. Al retirarlo, se deshabilitan ambas acciones y se limpia la vista previa.
 - Escucha opcional en el mismo navegador, solo si dispone de una voz local en español. No se reproduce automáticamente; se puede detener. Si no está disponible, el mensaje permanece legible y el envío simulado sigue funcionando.
 
-Los datos, horarios, sitios `.example`, Martha y el mapa son ficticios. La demo no pide permisos del navegador, consulta el GPS, lee dispositivos ni envía notificaciones o mensajes a teléfonos. La escucha usa síntesis local del navegador cuando está disponible. Los cambios viven en memoria y se reinician al recargar.
+Los datos, horarios, Martha y el mapa son ficticios. Los dominios mostrados son contenido ilustrativo; no representan historial real de ninguna persona. La demo no pide permisos del navegador, consulta el GPS, lee dispositivos ni envía notificaciones o mensajes a teléfonos. La escucha usa síntesis local del navegador cuando está disponible. Los cambios viven en memoria y se reinician al recargar.
 
 ## Qué queda para desarrollar en Android y el backend
 

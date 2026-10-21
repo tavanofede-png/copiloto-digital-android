@@ -138,4 +138,12 @@
 - Eliminados el correo de ejemplo y el CTA de novedades.
 - Añadidas la indicación de versión de prueba, compatibilidad con Android 8+, requisito de código de conexión e instrucciones de instalación.
 
+### Presentación visual de producto
+
+- Retiradas de la interfaz las etiquetas de mockup, demo, datos ficticios, próxima función y prueba, según el pedido del usuario.
+- Actualizados los textos de detalles, alertas, voz, estados y accesibilidad con lenguaje de producto.
+- Cambiado el acceso principal a «Abrir Grupo familiar» y ocultados los selectores de escenarios.
+- Conservadas las preferencias y los controles existentes. Los avisos preparados no confirman recepción en otro teléfono.
+- Esta edición modifica la presentación web; no añade integraciones de Android, GPS ni mensajería.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.

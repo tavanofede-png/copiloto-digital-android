@@ -20,11 +20,11 @@ Abrir `http://127.0.0.1:4173`. No hace falta instalar dependencias ni compilar. 
 
 ## Alcance de la edición
 
-Se conserva la identidad del HTML original. Las ediciones aprobadas incluyen los textos para el público de 65 a 99 años, las cajas con diálogos y avatares de «Qué es», y la sección Grupo familiar como próxima función con datos ficticios. El resto de las secciones adopta la misma jerarquía visual, iconografía Tabler, negritas y espaciado compacto, según el pedido de unificación del usuario.
+Se conserva la identidad del HTML original. Las ediciones aprobadas incluyen los textos para el público de 65 a 99 años, las cajas con diálogos y avatares de «Qué es», y la sección Grupo familiar. A pedido del usuario, el texto visible adopta una presentación de producto, sin etiquetas de demostración. El resto de las secciones adopta la misma jerarquía visual, iconografía Tabler, negritas y espaciado compacto.
 
 La demo de Grupo familiar permite recorrer Resumen, Actividad, Ubicación y Alertas, cambiar situaciones y simular permisos. También incluye un ping y un aviso de voz editable, con vista previa y estados de entrega simulados. La escucha opcional utiliza una voz local en español del navegador, cuando está disponible. No monitorea dispositivos, solicita acceso al GPS ni envía mensajes reales. Las decisiones de producto y el trabajo pendiente para Android/backend están en [`docs/GRUPO-FAMILIAR.md`](../docs/GRUPO-FAMILIAR.md).
 
-«Explorar el mockup de la app» amplía la demo y abre la actividad de Mamá. Incluye tiempos por aplicación, filtros de sitios/ayuda de Nieto y detalles de los eventos. La vista ampliada y la página comparten el mismo estado; al cerrar se conserva la selección y los permisos.
+«Abrir Grupo familiar» amplía la vista y abre la actividad de Mamá. Incluye tiempos por aplicación, filtros de sitios/ayuda de Nieto y detalles de los eventos. La vista ampliada y la página comparten el mismo estado; al cerrar se conserva la selección y los permisos.
 
 El CTA final «Descargá Nieto» enlaza el APK de prueba de la release `v0.2.0` publicada en GitHub. Se indica Android 8 o superior y la necesidad de un código de conexión. Al publicar otra versión, actualizar el enlace y el número de versión juntos.
 

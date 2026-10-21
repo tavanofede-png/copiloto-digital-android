@@ -5,9 +5,9 @@
   const get = selector => root.querySelector(selector);
   const all = selector => Array.from(root.querySelectorAll(selector));
   const state = {
-    scenario: 'normal',
+    scenario: 'alert',
     tab: 'summary',
-    pendingAlert: false,
+    pendingAlert: true,
     reviewed: false,
     notifications: true,
     sharing: { activity: true, screen: true, location: true, alerts: true, contact: true },
@@ -27,11 +27,11 @@
   const eventDialog = get('#gf-event-dialog');
   const wideMockup = window.matchMedia('(min-width:851px)');
   const activityEvents = {
-    recipe: { title:'Buscó una receta de cocina', time:'10:42', app:'Navegador', duration:'8 min', site:'recetas.example', description:'En este ejemplo, Mamá abrió una receta de cocina y consultó cómo encontrar sus ingredientes.', guidance:'Nieto le explicó dónde tocar para seguir leyendo. Mamá realizó cada paso en su propio celular.' },
-    whatsapp: { title:'Practicó cómo crear un grupo', time:'10:31', app:'WhatsApp', duration:'10 min', site:'No aplica', description:'Mamá practicó la creación de un grupo en WhatsApp. Este registro de ejemplo muestra la tarea realizada.', guidance:'La acompañó paso a paso y repitió las instrucciones. No se comparten contactos, nombres de grupos ni mensajes.' },
-    news: { title:'Leyó las noticias', time:'10:21', app:'Navegador', duration:'6 min', site:'noticias.example', description:'Mamá visitó un sitio de noticias. Se muestra el dominio de ejemplo y el tiempo de uso compartido.', guidance:'No pidió ayuda de Nieto en este evento de ejemplo.' },
-    session: { title:'Activó el acompañamiento', time:'10:15', app:'Nieto', duration:'No aplica', site:'No aplica', description:'En esta simulación, Mamá inició el acompañamiento y mantuvo habilitados los permisos elegidos para su grupo.', guidance:'Quedó disponible para responder sus preguntas y guiarla con paciencia.' },
-    risk: { title:'Abrió un enlace sospechoso', time:'10:44', app:'Navegador', duration:'No disponible', site:'premios.example', description:'El escenario de prueba incluye un sitio potencialmente inseguro. Esta alerta representa un posible riesgo; no confirma un fraude.', guidance:'Le sugirió no continuar y generó una alerta de ejemplo para que su familia pueda acompañarla.' },
+    recipe: { title:'Buscó una receta de cocina', time:'10:42', app:'Navegador', duration:'8 min', site:'paulinacocina.net', description:'Mamá abrió una receta de cocina y consultó cómo encontrar sus ingredientes.', guidance:'Nieto le explicó dónde tocar para seguir leyendo. Mamá realizó cada paso en su propio celular.' },
+    whatsapp: { title:'Practicó cómo crear un grupo', time:'10:31', app:'WhatsApp', duration:'10 min', site:'No aplica', description:'Mamá practicó la creación de un grupo en WhatsApp y repitió los pasos para aprender el proceso.', guidance:'La acompañó paso a paso y repitió las instrucciones con paciencia.' },
+    news: { title:'Leyó las noticias', time:'10:21', app:'Navegador', duration:'6 min', site:'lanacion.com.ar', description:'Mamá visitó un sitio de noticias desde el navegador de su celular.', guidance:'Realizó esta actividad por su cuenta.' },
+    session: { title:'Activó el acompañamiento', time:'10:15', app:'Nieto', duration:'No aplica', site:'No aplica', description:'Mamá inició el acompañamiento y mantuvo habilitados los permisos elegidos para su grupo.', guidance:'Quedó disponible para responder sus preguntas y guiarla con paciencia.' },
+    risk: { title:'Abrió un enlace sospechoso', time:'10:44', app:'Navegador', duration:'Sin registro', site:'Enlace por verificar', description:'Mamá abrió un enlace que requiere revisión. Conviene comprobar el sitio antes de continuar.', guidance:'Le sugirió no continuar y dejó una alerta para que su familia pueda acompañarla.' },
   };
 
   function updateMockupOrientation() {
@@ -48,6 +48,7 @@
       if (visible) count++;
     }
     text('#gf-activity-count', count + (count === 1 ? ' evento' : ' eventos'));
+    text('#gf-risk-status', state.reviewed ? 'Revisado' : 'Requiere revisión');
   }
 
   function openEvent(name) {
@@ -76,7 +77,7 @@
     for (const button of all('[data-gf-play]')) {
       button.classList.remove('is-playing');
       button.setAttribute('aria-pressed', 'false');
-      button.querySelector('span').textContent = 'Escuchar ejemplo';
+      button.querySelector('span').textContent = 'Escuchar aviso';
     }
     if (message !== undefined) audioStatus(message);
   }
@@ -90,12 +91,12 @@
     const message = button.dataset.gfPlay === 'composer' ? voiceInput.value.trim() : state.message?.content;
     if (!message) return;
     if (!speech || !('SpeechSynthesisUtterance' in window)) {
-      audioStatus('La reproducción de voz no está disponible en este navegador. El mensaje sigue visible para leerlo.');
+      audioStatus('Audio no disponible en este dispositivo. Podés leer el mensaje.');
       return;
     }
     const voice = speech.getVoices().find(item => item.localService && item.lang.toLowerCase().startsWith('es'));
     if (!voice) {
-      audioStatus('Este navegador no tiene una voz local en español disponible. Podés leer el ejemplo y simular el envío.');
+      audioStatus('Elegí una voz en español en tu dispositivo para escuchar el aviso.');
       return;
     }
     const utterance = new SpeechSynthesisUtterance(message);
@@ -105,20 +106,20 @@
     activeSpeech = { utterance, button };
     button.setAttribute('aria-pressed', 'true');
     button.querySelector('span').textContent = 'Detener audio';
-    audioStatus('Preparando el ejemplo de voz en este dispositivo…');
+    audioStatus('Preparando audio…');
     utterance.onstart = () => {
       if (activeSpeech?.utterance !== utterance) return;
       button.classList.add('is-playing');
-      audioStatus('Reproduciendo el ejemplo acá. No se envía a ningún teléfono.');
+      audioStatus('Reproduciendo aviso.');
     };
     utterance.onend = () => {
-      if (activeSpeech?.utterance === utterance) stopAudio('Ejemplo de audio finalizado.');
+      if (activeSpeech?.utterance === utterance) stopAudio('Audio finalizado.');
     };
     utterance.onerror = () => {
-      if (activeSpeech?.utterance === utterance) stopAudio('No se pudo reproducir el audio. Podés leer el mensaje y simular su envío.');
+      if (activeSpeech?.utterance === utterance) stopAudio('No se pudo reproducir el audio. Intentá nuevamente.');
     };
     try { speech.speak(utterance); }
-    catch { stopAudio('No se pudo reproducir el audio en este navegador.'); }
+    catch { stopAudio('No se pudo reproducir el audio. Intentá nuevamente.'); }
   }
 
   function renderContact() {
@@ -127,13 +128,13 @@
     get('#gf-contact-permission-note').hidden = state.sharing.contact;
     get('#gf-contact-preview').hidden = !state.message || !state.sharing.contact;
     text('#gf-voice-send-note', state.scenario === 'offline'
-      ? 'Nieto está desactivado en el ejemplo. El aviso quedará pendiente hasta que vuelva a activarse.'
-      : 'Se mostrará una vista previa. No se contactará ningún teléfono.');
+      ? 'El aviso quedará pendiente hasta que Nieto vuelva a activarse.'
+      : 'Revisá tu mensaje antes de continuar.');
     if (!state.message) return;
     const queued = state.message.status === 'queued';
     text('#gf-contact-message-title', state.message.type === 'voice' ? 'Un aviso con la voz de Nieto' : 'Un ping de tu hijo');
     text('#gf-contact-message-text', state.message.content);
-    text('#gf-contact-status', queued ? 'Pendiente · Nieto desactivado · demo' : 'Recibido por Mamá · demo');
+    text('#gf-contact-status', queued ? 'Pendiente · Nieto desactivado' : 'Aviso preparado');
     get('#gf-contact-status').classList.toggle('is-queued', queued);
     get('#gf-contact-play').hidden = state.message.type !== 'voice';
   }
@@ -145,8 +146,8 @@
     state.message = { type, content, status: queued ? 'queued' : 'delivered' };
     renderContact();
     announce(queued
-      ? 'Aviso de ejemplo pendiente. Se mostrará como recibido cuando actives Nieto en la simulación. No se envió ningún mensaje real.'
-      : 'Vista previa lista: así recibiría Mamá el aviso. No se contactó a ningún teléfono.');
+      ? 'Aviso pendiente. Nieto está desactivado.'
+      : 'Tu aviso está listo.');
   }
 
   function announce(message) {
@@ -178,7 +179,8 @@
     get('#gf-session').classList.toggle('is-offline', !active);
     text('#gf-session-label', active ? 'Nieto activado' : 'Nieto desactivado');
     get('#gf-session-note').hidden = active;
-    text('#gf-last-activity', active ? 'Hace 5 min' : '10:42');
+    text('#gf-last-activity', active ? (state.scenario === 'alert' ? 'Hace 3 min' : 'Hace 5 min') : '10:44');
+    text('#gf-last-activity-note', state.scenario === 'alert' ? 'Revisó un enlace con Nieto.' : 'Consultó una receta con Nieto.');
     for (const element of all('[data-gf-data]')) element.hidden = !state.sharing[element.dataset.gfData];
     for (const element of all('[data-gf-private]')) element.hidden = state.sharing[element.dataset.gfPrivate];
 
@@ -200,17 +202,17 @@
     text('#gf-safety-text', !state.sharing.alerts
       ? 'Mamá no comparte sus alertas de seguridad.'
       : pending ? 'Un enlace sospechoso para revisar juntos.'
-        : state.reviewed ? 'La alerta del ejemplo fue revisada.' : 'Sin alertas pendientes en este ejemplo.');
+        : state.reviewed ? 'La alerta fue revisada.' : 'Sin alertas pendientes.');
     get('#gf-review-alert').hidden = !pending;
     get('#gf-alert-card').hidden = !pending;
     get('#gf-alert-empty').hidden = pending;
     text('#gf-alert-empty-title', !state.sharing.alerts ? 'Alertas no compartidas' : state.reviewed ? 'Alerta revisada' : 'Todo en orden por ahora');
     text('#gf-alert-empty-text', !state.sharing.alerts
       ? 'Mamá eligió no compartir avisos de seguridad con su grupo.'
-      : state.reviewed ? 'Marcaste como revisada la alerta de esta demostración.' : 'No hay alertas pendientes en este ejemplo.');
+      : state.reviewed ? 'Marcaste esta alerta como revisada.' : 'No hay alertas pendientes.');
     get('.gf-notifications').hidden = !state.sharing.alerts;
-    get('#gf-simulate-alert').disabled = !active;
-    get('#gf-simulate-alert').textContent = active ? 'Probar una alerta de ejemplo →' : 'Activá Nieto en el ejemplo para probar una alerta';
+    get('#gf-simulate-alert').disabled = !state.sharing.activity;
+    get('#gf-simulate-alert').textContent = 'Ver actividad reciente →';
     get('#gf-notifications').checked = state.notifications;
     renderActivity();
     renderContact();
@@ -224,14 +226,14 @@
     if (deliverQueued) state.message.status = 'delivered';
     render();
     let message;
-    if (name === 'offline') message = 'Ejemplo: Nieto se desactivó. La ubicación y la actividad no reciben nuevas actualizaciones.';
+    if (name === 'offline') message = 'Nieto está desactivado. Consultá los últimos registros compartidos.';
     else if (name === 'alert' && state.sharing.alerts) {
       message = state.notifications
-        ? 'Notificación de ejemplo: Mamá abrió un enlace sospechoso. Podés revisarlo en Alertas. No se envió ninguna notificación real.'
-        : 'Alerta de ejemplo disponible en la pestaña Alertas. Los avisos están desactivados en esta demostración.';
-    } else if (name === 'alert') message = 'Mamá no comparte sus alertas de seguridad en este ejemplo.';
-    else message = 'Ejemplo: Nieto activado. Se muestran datos ficticios y los permisos elegidos.';
-    if (deliverQueued) message += ' El aviso pendiente ahora figura como recibido en esta demo.';
+        ? 'Hay un enlace sospechoso para revisar en Alertas.'
+        : 'Alerta disponible en la pestaña Alertas. Tenés los avisos desactivados.';
+    } else if (name === 'alert') message = 'Mamá no comparte sus alertas de seguridad.';
+    else message = 'Nieto activado. Podés consultar la actividad compartida.';
+    if (deliverQueued) message += ' Tu aviso está listo.';
     announce(message);
   }
 
@@ -283,14 +285,14 @@
     state.reviewed = true;
     render();
     get('#gf-tab-alerts').focus({ preventScroll: true });
-    announce('La alerta del ejemplo quedó revisada. No se contactó a tu familiar.');
+    announce('Alerta marcada como revisada.');
   });
-  get('#gf-simulate-alert').addEventListener('click', () => useScenario('alert'));
+  get('#gf-simulate-alert').addEventListener('click', () => selectTab('activity', true));
   get('#gf-notifications').addEventListener('change', event => {
     state.notifications = event.target.checked;
     announce(state.notifications
-      ? 'Notificaciones activadas en esta demo. No se enviarán avisos reales.'
-      : 'Notificaciones desactivadas en esta demo. Las alertas seguirán disponibles para consultar.');
+      ? 'Preferencia de notificaciones activada.'
+      : 'Preferencia de notificaciones desactivada. Podés seguir consultando las alertas.');
   });
   get('#gf-permissions-button').addEventListener('click', event => {
     const permissions = get('#gf-permissions');
@@ -307,7 +309,7 @@
         if (voiceDialog.open) voiceDialog.close();
       }
       render();
-      announce('Permisos actualizados solo en este ejemplo. Tu familiar mantendrá el control desde su propio celular.');
+      announce('Preferencias actualizadas.');
     });
   }
   get('#gf-send-ping').addEventListener('click', () => sendContact('ping', 'Hola Martha, tu hijo te mandó un ping para estar cerca.'));

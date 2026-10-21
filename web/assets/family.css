@@ -10,6 +10,7 @@
 .gf-intro{font-size:18px;line-height:1.7;margin-bottom:18px}
 .gf-coming{display:inline-flex;align-items:center;min-height:30px;padding:4px 10px;background:white;border:1px solid var(--line);border-radius:8px;color:var(--navy);font-size:12px;font-weight:800}
 .gf-features{list-style:none;padding:0;margin:24px 0;display:grid;gap:20px}
+.gf-copy>.gf-features:first-child{margin-top:0}
 .gf-features li{display:flex;gap:14px;align-items:flex-start}
 .gf-feature-icon{display:grid;place-items:center;flex:0 0 44px;width:44px;height:44px;background:white;border-radius:14px;color:var(--blue)}
 .gf-feature-icon>.gf-icon{width:26px;height:26px}
