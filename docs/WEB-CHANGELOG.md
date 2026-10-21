@@ -150,4 +150,10 @@
 
 - Corregido «Tunieto digital» por «Tu nieto digital».
 
+### Texto de edad y salto de línea en «Qué es»
+
+- Cambiado a «Pensado para adultos entre 65 a 100 años de edad.».
+- Colocada en la línea siguiente la oración que comienza con «NIETO transforma».
+- Actualizada la edad máxima de la descripción de la página a 100 años.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
