@@ -21,4 +21,8 @@
 - En adelante, aplicar solamente pedidos explícitos del usuario.
 - Al terminar cada cambio solicitado, hacer commit y push a GitHub de inmediato, verificando el resultado.
 
+### Texto debajo del título principal
+
+- Reemplazada la oración por el texto exacto pedido: «Tunieto digital te explica paso a paso, con paciencia y sin seguro. para que uses tu celular con mas confianza a tu ritmo.»
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
