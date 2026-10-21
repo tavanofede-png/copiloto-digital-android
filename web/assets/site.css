@@ -257,3 +257,15 @@
     #que-es h2 .accent{color:var(--blue)}
     #que-es .section-eyebrow{padding-left:calc(clamp(25px,4vw,60px) + 1px)}
     @media(max-width:520px){#que-es .section-eyebrow{padding-left:23px}}
+
+    #que-es .card h3{min-height:2.5em;line-height:1.25;margin-bottom:0}
+    #que-es .dialogue-bubble{
+      position:relative;display:flex;align-items:center;min-height:116px;
+      margin:22px 0 26px;padding:18px;background:var(--blue-soft);border-radius:20px;
+    }
+    #que-es .dialogue-bubble::after{
+      content:"";position:absolute;left:26px;bottom:-7px;width:16px;height:16px;
+      background:var(--blue-soft);border-radius:2px;transform:rotate(45deg);
+    }
+    #que-es .dialogue-bubble p{color:var(--navy);font-size:17px;line-height:1.5;margin:0}
+    @media(max-width:980px){#que-es .card h3,#que-es .dialogue-bubble{min-height:0}}

@@ -42,4 +42,12 @@
 
 - Aplicado a «Smartphone» el mismo azul claro del texto «TE ACOMPAÑA» del título principal, usando la variable de color existente.
 
+### Tres cajas de la sección «Qué es»
+
+- Aplicado el esquema pedido: título, globo de diálogo con una pregunta de ejemplo y texto explicativo.
+- Caja 1: pedir ayuda y recibir el paso a paso, con el ejemplo de crear un grupo en WhatsApp.
+- Caja 2: ver la misma pantalla y ayudar a destrabarse cuando la persona se pierde.
+- Caja 3: usar a Nieto como profesor de tecnología y repetir hasta poder hacerlo por cuenta propia.
+- Conservadas la paleta y la estructura general de la página.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
