@@ -21,11 +21,11 @@
   const speech = 'speechSynthesis' in window ? window.speechSynthesis : null;
   let activeSpeech = null;
   const explorer = get('#gf-explorer');
-  const demo = get('#familia-demo');
-  const demoMarker = document.createComment('family-demo-home');
-  demo.before(demoMarker);
+  const tablet = get('#gf-family-tablet');
+  const tabletMarker = document.createComment('family-tablet-home');
+  tablet.before(tabletMarker);
   const eventDialog = get('#gf-event-dialog');
-  const wideMockup = window.matchMedia('(min-width:851px)');
+  const wideMockup = window.matchMedia('(min-width:601px)');
   const activityEvents = {
     recipe: { title:'Buscó una receta de cocina', time:'10:42', app:'Navegador', duration:'8 min', site:'paulinacocina.net', description:'Mamá abrió una receta de cocina y consultó cómo encontrar sus ingredientes.', guidance:'Nieto le explicó dónde tocar para seguir leyendo. Mamá realizó cada paso en su propio celular.' },
     whatsapp: { title:'Practicó cómo crear un grupo', time:'10:31', app:'WhatsApp', duration:'10 min', site:'No aplica', description:'Mamá practicó la creación de un grupo en WhatsApp y repitió los pasos para aprender el proceso.', guidance:'La acompañó paso a paso y repitió las instrucciones con paciencia.' },
@@ -35,8 +35,41 @@
   };
 
   function updateMockupOrientation() {
-    get('.gf-tabs').setAttribute('aria-orientation', explorer.open && wideMockup.matches ? 'vertical' : 'horizontal');
+    get('.gf-tabs').setAttribute('aria-orientation', wideMockup.matches ? 'vertical' : 'horizontal');
   }
+
+  function fitTabletDialog(dialog) {
+    const screen = get('#gf-tablet-screen').getBoundingClientRect();
+    const left = Math.max(12, screen.left);
+    const right = Math.min(window.innerWidth - 12, screen.right);
+    const top = Math.max(12, screen.top);
+    const bottom = Math.min(window.innerHeight - 12, screen.bottom);
+    const width = Math.max(200, right - left);
+    const height = Math.max(140, bottom - top);
+    dialog.classList.add('gf-tablet-dialog');
+    dialog.style.width = Math.min(dialog === voiceDialog ? 480 : 540, width - 24) + 'px';
+    dialog.style.maxHeight = (height - 24) + 'px';
+    dialog.style.left = (left + width / 2) + 'px';
+    dialog.style.top = (top + height / 2) + 'px';
+    for (const [key, value] of Object.entries({left, top, width, height})) dialog.style.setProperty('--gf-screen-' + key, value + 'px');
+  }
+
+  function openTabletDialog(dialog) {
+    if (!explorer.open) {
+      const headerHeight = document.querySelector('.top').getBoundingClientRect().height;
+      window.scrollBy({top:tablet.getBoundingClientRect().top - headerHeight - 12, behavior:'instant'});
+    }
+    fitTabletDialog(dialog);
+    dialog.showModal();
+    document.body.classList.add('gf-tablet-popup-open');
+  }
+
+  for (const dialog of [eventDialog, voiceDialog]) dialog.addEventListener('close', () => {
+    if (!eventDialog.open && !voiceDialog.open) document.body.classList.remove('gf-tablet-popup-open');
+  });
+  window.addEventListener('resize', () => {
+    for (const dialog of [eventDialog, voiceDialog]) if (dialog.open) fitTabletDialog(dialog);
+  });
 
   function renderActivity() {
     let count = 0;
@@ -62,7 +95,7 @@
     text('#gf-event-description', event.description);
     text('#gf-event-guidance', event.guidance);
     get('#gf-event-see-alerts').hidden = name !== 'risk';
-    eventDialog.showModal();
+    openTabletDialog(eventDialog);
     get('#gf-close-event').focus();
   }
 
@@ -167,6 +200,7 @@
       if (selected && focus) tab.focus({ preventScroll: true });
     }
     if (explorer.open) explorer.scrollTop = 0;
+    get('#gf-tablet-screen').scrollTop = 0;
   }
 
   function render() {
@@ -253,7 +287,7 @@
   }
   for (const button of all('[data-gf-go]')) button.addEventListener('click', () => selectTab(button.dataset.gfGo, true));
   get('#gf-open-mockup').addEventListener('click', () => {
-    get('#gf-explorer-mount').append(demo);
+    get('#gf-explorer-mount').append(tablet);
     explorer.showModal();
     document.body.classList.add('gf-explorer-open');
     updateMockupOrientation();
@@ -262,7 +296,7 @@
   get('#gf-close-explorer').addEventListener('click', () => explorer.close());
   explorer.addEventListener('close', () => {
     stopAudio('');
-    demoMarker.after(demo);
+    tabletMarker.after(tablet);
     document.body.classList.remove('gf-explorer-open');
     updateMockupOrientation();
     get('#gf-open-mockup').focus({ preventScroll:true });
@@ -317,7 +351,7 @@
     if (!state.sharing.contact) return;
     stopAudio('');
     renderContact();
-    voiceDialog.showModal();
+    openTabletDialog(voiceDialog);
     voiceInput.focus();
   });
   get('#gf-close-contact-preview').addEventListener('click', () => {
@@ -345,5 +379,6 @@
   window.addEventListener('pagehide', () => stopAudio());
   text('#gf-voice-count', voiceInput.value.length + '/180');
   render();
+  updateMockupOrientation();
   selectTab('summary');
 })();

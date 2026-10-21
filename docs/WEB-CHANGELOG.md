@@ -156,4 +156,12 @@
 - Colocada en la línea siguiente la oración que comienza con «NIETO transforma».
 - Actualizada la edad máxima de la descripción de la página a 100 años.
 
+### Interfaz de Grupo familiar dentro de una tablet
+
+- Enmarcada toda la interfaz en una tablet con bisel oscuro, cámara y pantalla desplazable.
+- Conservado el dispositivo al ampliar Grupo familiar y al volver a la sección, compartiendo el mismo estado.
+- Adaptada la navegación a la pantalla horizontal y a la orientación vertical en celular.
+- Ajustados los diálogos de actividad y voz para que se abran dentro de los límites de la pantalla de la tablet.
+- Conservados los textos, la paleta de la app y sus controles.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.

@@ -24,7 +24,7 @@ La sección de familias existente pasa a presentar **Grupo familiar**, con un ac
 
 ## Qué permite probar la demo
 
-- **Abrir Grupo familiar:** abre la misma interfaz en una vista ampliada, con navegación lateral en escritorio y distribución compacta en celular. Al cerrarla, la vista vuelve a su lugar y conserva sus permisos y estados.
+- **Abrir Grupo familiar:** amplía la tablet que contiene la interfaz, con navegación lateral en escritorio y distribución compacta en celular. Al cerrarla, el dispositivo vuelve a su lugar y conserva sus permisos y estados. La pantalla tiene desplazamiento propio y los diálogos de actividad y voz se ajustan a sus límites.
 - **Actividad de Mamá:** desglose ilustrativo de 24 minutos de pantalla (14 de navegador y 10 de WhatsApp), con 12 minutos acompañada por Nieto. Los tiempos son ficticios.
 - **Cronología y filtros:** permite ver todos los eventos, los sitios web o las actividades con Nieto. Una actividad puede pertenecer a ambas categorías.
 - **Detalle de cada evento:** hora, aplicación, sitio de ejemplo y tiempo compartido, más una explicación de cómo la acompañó Nieto. No se muestran conversaciones ni pantallas privadas.
