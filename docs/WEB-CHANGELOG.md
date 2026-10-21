@@ -146,4 +146,8 @@
 - Conservadas las preferencias y los controles existentes. Los avisos preparados no confirman recepción en otro teléfono.
 - Esta edición modifica la presentación web; no añade integraciones de Android, GPS ni mensajería.
 
+### Corrección del texto debajo del título principal
+
+- Corregido «Tunieto digital» por «Tu nieto digital».
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
