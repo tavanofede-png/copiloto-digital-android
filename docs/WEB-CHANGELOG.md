@@ -185,4 +185,11 @@
 - Conservados los colores, ilustraciones y avatares del producto.
 - Añadidos el MP4, los subtítulos y la portada como archivos independientes para compartir desde la web.
 
+### Nueva voz y video a 1,1×
+
+- Reemplazada la narración por una nueva voz masculina argentina, con menos pausas entre frases.
+- Acelerado el montaje completo a 1,1×, con duración final de aproximadamente 36,4 segundos.
+- Ajustados los subtítulos a la nueva voz y velocidad; conservado el tono al acelerar el audio.
+- Actualizado el archivo público conservando el mismo enlace.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.

@@ -1,55 +1,55 @@
 1
-00:00:00,410 --> 00:00:02,790
-Conocé Nieto: tu asistente personal
+00:00:00,191 --> 00:00:02,730
+Conocé Nieto. Tu asistente personal
 
 2
-00:00:02,810 --> 00:00:04,972
+00:00:02,748 --> 00:00:04,502
 para usar el celular con más confianza.
 
 3
-00:00:06,410 --> 00:00:09,290
+00:00:05,645 --> 00:00:08,161
 Pedí ayuda. Nieto ve tu pantalla
 
 4
-00:00:09,310 --> 00:00:12,098
-y te guía, paso a paso, con paciencia.
+00:00:08,180 --> 00:00:10,173
+y te guía paso a paso, con paciencia.
 
 5
-00:00:13,410 --> 00:00:15,022
-Repetí lo que necesites,
+00:00:12,009 --> 00:00:13,241
+Repetí lo que necesites
 
 6
-00:00:15,222 --> 00:00:17,185
+00:00:13,259 --> 00:00:14,877
 hasta aprender a hacerlo por tu cuenta.
 
 7
-00:00:19,404 --> 00:00:21,478
-En Grupo familiar, acompañá a mamá:
+00:00:17,464 --> 00:00:19,195
+En Grupo familiar acompañá a mamá:
 
 8
-00:00:21,652 --> 00:00:24,088
+00:00:19,305 --> 00:00:21,525
 actividad, sitios, tiempo de pantalla
 
 9
-00:00:24,108 --> 00:00:25,907
+00:00:21,543 --> 00:00:23,286
 y ubicación compartida con permiso.
 
 10
-00:00:26,624 --> 00:00:28,434
-También, alertas de seguridad.
+00:00:24,055 --> 00:00:25,411
+También alertas de seguridad.
 
 11
-00:00:29,410 --> 00:00:31,435
-Un ping, o un aviso de voz:
+00:00:26,555 --> 00:00:27,968
+Un ping o un aviso de voz:
 
 12
-00:00:31,498 --> 00:00:33,735
+00:00:28,020 --> 00:00:29,752
 Hola Martha, tu hijo está por llegar.
 
 13
-00:00:35,408 --> 00:00:37,061
+00:00:32,009 --> 00:00:33,434
 Descargá Nieto para Android.
 
 14
-00:00:37,812 --> 00:00:39,536
+00:00:34,145 --> 00:00:35,673
 Nieto, siempre a tu lado.
