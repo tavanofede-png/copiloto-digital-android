@@ -258,14 +258,52 @@
     #que-es .section-eyebrow{padding-left:calc(clamp(25px,4vw,60px) + 1px)}
     @media(max-width:520px){#que-es .section-eyebrow{padding-left:23px}}
 
-    #que-es .card h3{min-height:2.5em;line-height:1.25;margin-bottom:0}
+    #que-es .card{
+      min-width:0;display:flex;flex-direction:column;border-color:var(--line);
+      transition:transform .18s ease;
+    }
+    #que-es .card:hover,#que-es .card:focus-within{
+      border-color:var(--blue);box-shadow:0 16px 34px rgba(14,43,90,.09);
+    }
+    @media(hover:hover) and (pointer:fine){#que-es .card:hover{transform:translateY(-4px)}}
+    #que-es .benefit-header{display:flex;align-items:flex-start;gap:12px;min-height:82px}
+    #que-es .benefit-header h3{min-height:0;font-size:22px;line-height:1.25;margin:0;letter-spacing:-.025em}
+    #que-es .benefit-icon{display:grid;place-items:center;flex:0 0 44px;width:44px;height:44px;border-radius:14px;background:var(--blue-soft)}
+    #que-es .benefit-icon::before{
+      content:"";display:block;width:26px;height:26px;background:var(--blue);
+      -webkit-mask:var(--benefit-icon) center/contain no-repeat;mask:var(--benefit-icon) center/contain no-repeat;
+    }
+    #que-es .benefit-icon--help{--benefit-icon:url("icons/message-circle-question.svg")}
+    #que-es .benefit-icon--screen{--benefit-icon:url("icons/device-mobile-search.svg")}
+    #que-es .benefit-icon--learn{--benefit-icon:url("icons/school.svg")}
     #que-es .dialogue-bubble{
-      position:relative;display:flex;align-items:center;min-height:116px;
-      margin:22px 0 26px;padding:18px;background:var(--blue-soft);border-radius:20px;
+      position:relative;display:flex;align-items:flex-start;gap:12px;min-height:148px;
+      margin:20px 0 26px;padding:18px 16px;background:var(--blue-soft);border-radius:20px;
     }
     #que-es .dialogue-bubble::after{
-      content:"";position:absolute;left:26px;bottom:-7px;width:16px;height:16px;
+      content:"";position:absolute;left:28px;bottom:-7px;width:16px;height:16px;
       background:var(--blue-soft);border-radius:2px;transform:rotate(45deg);
     }
-    #que-es .dialogue-bubble p{color:var(--navy);font-size:17px;line-height:1.5;margin:0}
-    @media(max-width:980px){#que-es .card h3,#que-es .dialogue-bubble{min-height:0}}
+    #que-es .dialogue-avatar{
+      flex:0 0 36px;width:36px;height:36px;overflow:hidden;border-radius:50%;
+      background:var(--sky);border:3px solid white;box-shadow:0 0 0 1px rgba(59,130,246,.12);
+    }
+    #que-es .dialogue-avatar img{width:100%;height:100%;object-fit:cover}
+    #que-es .dialogue-bubble p{min-width:0;color:var(--navy);font-size:17px;line-height:1.5;margin:0}
+    #que-es .dialogue-bubble strong{font-weight:850}
+    #que-es .benefit-description{margin:0 0 22px;font-size:18px;line-height:1.6}
+    #que-es .benefit-description strong{color:var(--navy);font-weight:750}
+    #que-es .benefit-example{margin-top:auto;border-top:1px solid var(--line)}
+    #que-es .benefit-example summary{
+      position:relative;display:flex;align-items:center;min-height:54px;padding:14px 28px 0 0;
+      color:var(--navy);font-size:15px;font-weight:800;line-height:1.4;list-style:none;cursor:pointer;
+    }
+    #que-es .benefit-example summary::-webkit-details-marker{display:none}
+    #que-es .benefit-example summary::after{content:"+";position:absolute;right:1px;top:15px;color:var(--blue);font-size:23px;line-height:1}
+    #que-es .benefit-example summary:hover,#que-es .benefit-example[open] summary{color:var(--blue)}
+    #que-es .benefit-example[open] summary::after{content:"−"}
+    #que-es .benefit-answer{padding:18px 0 2px}
+    #que-es .benefit-answer > span{display:block;color:var(--blue);font-size:13px;font-weight:800;margin-bottom:8px}
+    #que-es .benefit-answer p{font-size:16px;line-height:1.6;margin:0}
+    @media(max-width:1100px) and (min-width:981px){#que-es .card{padding:24px}#que-es .benefit-header{min-height:100px}}
+    @media(max-width:980px){#que-es .benefit-header,#que-es .dialogue-bubble{min-height:0}}

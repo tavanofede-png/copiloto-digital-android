@@ -50,4 +50,12 @@
 - Caja 3: usar a Nieto como profesor de tecnología y repetir hasta poder hacerlo por cuenta propia.
 - Conservadas la paleta y la estructura general de la página.
 
+### Ajustes de UI/UX pedidos para las cajas
+
+- Añadidos iconos oficiales de Tabler (ayuda, pantalla y aprendizaje), con su licencia en `web/assets/icons/`.
+- Añadidos círculos de perfil en los diálogos, preparados para incorporar la foto de la abuela cuando el usuario la entregue.
+- Resaltadas las frases clave de los diálogos y explicaciones en negrita.
+- Mejoradas las jerarquías, el espaciado y las respuestas visuales al pasar el puntero o usar el teclado, conservando la paleta.
+- Añadido «Ver ejemplo de respuesta» desplegable en cada caja. Son ejemplos preparados, identificados como tales.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
