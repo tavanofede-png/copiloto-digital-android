@@ -38,7 +38,7 @@ fun PermissionScreen(overlayGranted: Boolean, busy: Boolean, error: String?, onC
                 Text(if (busy) "Iniciando…" else if (overlayGranted) "Permitir y comenzar" else "Permitir burbuja",
                     Modifier.padding(vertical = 8.dp), style = MaterialTheme.typography.titleMedium)
             }
-            Text("En esta primera prueba solo necesitamos burbuja y pantalla. El micrófono se habilitará cuando esté disponible la ayuda por voz.",
+            Text("El micrófono se pide al usar la ayuda por voz. Solo escuchamos mientras hacés tu consulta; también podés escribir.",
                 style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }

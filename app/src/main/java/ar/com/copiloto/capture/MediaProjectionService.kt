@@ -19,6 +19,21 @@ import ar.com.copiloto.MainActivity
 import ar.com.copiloto.R
 import ar.com.copiloto.overlay.OverlayController
 import ar.com.copiloto.session.AssistanceSessionManager
+import ar.com.copiloto.assistant.ConnectionSettings
+import ar.com.copiloto.assistant.HttpAssistantApi
+import ar.com.copiloto.assistant.ConversationContext
+import ar.com.copiloto.assistant.GuidanceResponse
+import ar.com.copiloto.overlay.BubbleState
+import ar.com.copiloto.voice.GuidanceSpeaker
+import ar.com.copiloto.voice.VoiceCaptureActivity
+import ar.com.copiloto.voice.VoiceInputBus
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.CancellationException
 
 /** Owns the entire session: projection, notification, overlays and pending work. */
 class MediaProjectionService : Service() {
@@ -28,6 +43,22 @@ class MediaProjectionService : Service() {
     private var stopping = false
     private var stopMessage: String? = null
     private var captureInProgress = false
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private lateinit var api: HttpAssistantApi
+    private lateinit var speaker: GuidanceSpeaker
+    private val conversation = ConversationContext()
+    private var request: Job? = null
+    private var generation = 0
+    private var pendingStart: Runnable? = null
+    private var lastGuidance: GuidanceResponse? = null
+
+    override fun onCreate() {
+        super.onCreate()
+        api = HttpAssistantApi(ConnectionSettings(this))
+        speaker = GuidanceSpeaker(this) { speaking ->
+            if (!stopping && !captureInProgress) overlay?.setState(if (speaking) BubbleState.SPEAKING else BubbleState.IDLE)
+        }
+    }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -61,7 +92,10 @@ class MediaProjectionService : Service() {
                     if (stopping) return@start
                     result.onSuccess {
                         runCatching {
-                            overlay = OverlayController(this, ::captureOne) { stopSession() }.also { it.show() }
+                            overlay = OverlayController(this, onCapture = ::captureOne, onStop = { stopSession() },
+                                onVoice = ::askByVoice, onQuestion = { ask(question = it) },
+                                onCancel = { cancelAssistance(); overlay?.showInput() },
+                                onRepeat = { lastGuidance?.let { speaker.speak(it.message, it.audioPcm) } }).also { it.show() }
                             AssistanceSessionManager.started()
                             Log.i(TAG, "session_started")
                         }.onFailure { stopSession("No pude mostrar la burbuja. Revisá el permiso y volvé a probar.") }
@@ -107,6 +141,95 @@ class MediaProjectionService : Service() {
         }, 350)
     }
 
+    private fun askByVoice() {
+        if (captureInProgress || stopping) return
+        speaker.stop()
+        val id = VoiceInputBus.await { result ->
+            captureInProgress = false
+            if (stopping) return@await
+            result.onSuccess { ask(audio = it) }.onFailure {
+                AssistanceSessionManager.idle()
+                overlay?.showInput()
+            }
+        }
+        runCatching {
+            startActivity(Intent(this, VoiceCaptureActivity::class.java)
+                .putExtra("voiceRequestId", id).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            captureInProgress = true
+            AssistanceSessionManager.processing("Escuchando tu consulta…")
+            overlay?.prepareVoice()
+        }.onFailure {
+            VoiceInputBus.clear()
+            captureInProgress = false
+            overlay?.showError("No pude abrir el micrófono. Podés escribir tu consulta.")
+            AssistanceSessionManager.error("No pude abrir el micrófono.")
+        }
+    }
+
+    private fun ask(question: String? = null, audio: ByteArray? = null) {
+        if (captureInProgress || stopping) return
+        if (!Settings.canDrawOverlays(this)) { stopSession("Falta el permiso de la burbuja."); return }
+        speaker.stop()
+        captureInProgress = true
+        val current = ++generation
+        overlay?.prepareCapture()
+        AssistanceSessionManager.processing("Estoy mirando tu pantalla…")
+        val geometry = ScreenGeometry.read(this)
+        pendingStart = Runnable {
+            if (stopping || generation != current) return@Runnable
+            capture?.capture(geometry) { result ->
+                if (stopping || generation != current) return@capture
+                val screen = result.getOrNull()
+                overlay?.showLoading()
+                request = scope.launch {
+                    try {
+                        val guidance = api.getGuidance(screen, geometry.width, geometry.height, question, audio, conversation.snapshot())
+                        if (stopping || generation != current) return@launch
+                        captureInProgress = false
+                        val now = ScreenGeometry.read(this@MediaProjectionService)
+                        if (now.width != geometry.width || now.height != geometry.height) {
+                            overlay?.showError("La pantalla cambió de orientación. Volvé a preguntar para ubicar la indicación.")
+                            AssistanceSessionManager.error("La pantalla cambió. Volvé a consultar.")
+                            return@launch
+                        }
+                        lastGuidance = guidance
+                        conversation.add(question ?: guidance.heardQuestion, guidance.message)
+                        AssistanceSessionManager.answered(guidance.message)
+                        overlay?.showGuidance(guidance)
+                        speaker.speak(guidance.message, guidance.audioPcm)
+                        Log.i(TAG, "guidance_received risk=${guidance.risk} target=${guidance.canHighlight}")
+                    } catch (_: CancellationException) {
+                        // Cancellation is an intentional user action.
+                    } catch (error: Exception) {
+                        if (stopping || generation != current) return@launch
+                        captureInProgress = false
+                        val message = when (error) {
+                            is java.net.UnknownHostException, is java.net.ConnectException -> "No tengo conexión en este momento. Revisá internet y volvé a intentar."
+                            is java.net.SocketTimeoutException -> "La respuesta está tardando demasiado. Probá nuevamente."
+                            else -> error.message ?: "No pude entender esta pantalla. Intentemos otra vez."
+                        }
+                        AssistanceSessionManager.error(message)
+                        overlay?.showError(message)
+                        speaker.speak(message, null)
+                    }
+                }
+            }
+        }.also { main.postDelayed(it, 400) }
+    }
+
+    private fun cancelAssistance() {
+        generation++
+        pendingStart?.let { main.removeCallbacks(it) }
+        pendingStart = null
+        capture?.cancelCapture()
+        api.cancel()
+        request?.cancel()
+        request = null
+        captureInProgress = false
+        speaker.stop()
+        AssistanceSessionManager.idle()
+    }
+
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         overlay?.onConfigurationChanged()
@@ -126,12 +249,16 @@ class MediaProjectionService : Service() {
     }
 
     private fun cleanup() {
+        VoiceInputBus.clear()
+        cancelAssistance()
         main.removeCallbacksAndMessages(null)
         overlay?.close()
         overlay = null
         capture?.close()
         capture = null
         captureInProgress = false
+        lastGuidance = null
+        conversation.clear()
         AssistanceSessionManager.stopped(stopMessage)
         stopForeground(STOP_FOREGROUND_REMOVE)
     }
@@ -139,6 +266,8 @@ class MediaProjectionService : Service() {
     override fun onDestroy() {
         stopping = true
         cleanup()
+        speaker.close()
+        scope.cancel()
         Log.i(TAG, "session_stopped")
         super.onDestroy()
     }

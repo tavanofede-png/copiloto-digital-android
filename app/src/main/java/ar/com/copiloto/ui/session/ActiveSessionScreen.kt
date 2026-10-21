@@ -25,10 +25,12 @@ fun ActiveSessionScreen(session: SessionState, onOpenBrowser: () -> Unit, onStop
                 style = MaterialTheme.typography.bodyLarge)
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)) {
                 Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text("Probemos la pantalla", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                    Text("Abrí Chrome, tocá la burbuja y elegí “Probar captura”. Verás una vista previa que se borra al cerrar el panel.",
+                    Text("Un paso a la vez", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Text("Abrí otra app, tocá la burbuja y preguntá por voz o escribiendo. Copiloto te explica el próximo paso y señala dónde tocar.",
                         style = MaterialTheme.typography.bodyLarge)
                     if (session.capturing) LinearProgressIndicator(Modifier.fillMaxWidth())
+                    session.status?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
+                    session.lastMessage?.let { Text(it, style = MaterialTheme.typography.bodyLarge) }
                     session.captureSummary?.let { Text("Última captura: $it", style = MaterialTheme.typography.bodyMedium) }
                 }
             }

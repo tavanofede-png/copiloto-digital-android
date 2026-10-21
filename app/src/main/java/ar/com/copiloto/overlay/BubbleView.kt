@@ -7,7 +7,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.view.View
 
-enum class BubbleState { IDLE, THINKING, ERROR }
+enum class BubbleState { IDLE, LISTENING, THINKING, SPEAKING, ERROR }
 
 class BubbleView(context: Context) : View(context) {
     var state = BubbleState.IDLE
@@ -15,7 +15,9 @@ class BubbleView(context: Context) : View(context) {
             field = value
             contentDescription = when (value) {
                 BubbleState.IDLE -> "Abrir Copiloto. Arrastrá para mover la burbuja."
-                BubbleState.THINKING -> "Capturando pantalla"
+                BubbleState.THINKING -> "Copiloto está preparando tu indicación"
+                BubbleState.LISTENING -> "Escuchando tu consulta"
+                BubbleState.SPEAKING -> "Copiloto está hablando"
                 BubbleState.ERROR -> "Copiloto necesita tu atención"
             }
             invalidate()
@@ -54,7 +56,13 @@ class BubbleView(context: Context) : View(context) {
             paint.textAlign = Paint.Align.CENTER
             paint.textSize = height * .45f
             paint.isFakeBoldText = true
-            canvas.drawText(if (state == BubbleState.ERROR) "!" else "…", center,
+            val symbol = when (state) {
+                BubbleState.ERROR -> "!"
+                BubbleState.LISTENING -> "●"
+                BubbleState.SPEAKING -> "≈"
+                else -> "…"
+            }
+            canvas.drawText(symbol, center,
                 center - (paint.ascent() + paint.descent()) / 2f, paint)
             paint.isFakeBoldText = false
         }

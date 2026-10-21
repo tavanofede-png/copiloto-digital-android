@@ -1,156 +1,107 @@
-# Copiloto
+# Copiloto digital · Android
 
-Un copiloto que acompaña a las personas mientras usan su celular. La IA no hace el trámite por vos: te enseña a hacerlo, un paso a la vez.
+Asistencia por voz y pantalla, un paso a la vez. Copiloto explica y señala; la persona toca por su cuenta. No usa AccessibilityService ni ejecuta acciones en otras apps.
 
-## Estado actual
+## Versión 0.2.0
 
-Primera entrega implementada y compilada: **fases 1–3** del plan proporcionado, con validación física pendiente. Incluye el proyecto Android, inicio de sesión, permisos, notificación con acción de finalizar, burbuja arrastrable y captura de pantalla a pedido con vista previa en memoria.
+Integra **OpenAI `gpt-realtime-2.1-mini`** mediante un backend HTTPS en Vercel. Recibe una pregunta hablada o escrita y una captura puntual; devuelve un paso, voz y un objetivo visual aproximado. Grok no está integrado en esta versión.
 
-La compilación y las pruebas en dispositivo se registran en [docs/VALIDATION.md](docs/VALIDATION.md). No se considera terminado el MVP hasta probar físicamente el recorrido completo con voz e IA. **Voz, backend, IA y highlights todavía no están implementados.** El plan requiere validar primero la burbuja sobre Chrome y la captura real.
+La compilación, las pruebas automáticas y una consulta real de voz + imagen al backend publicado pasaron. **El recorrido físico en Android todavía no fue probado.** El registro y los casos pendientes están en [docs/VALIDATION.md](docs/VALIDATION.md). Esta entrega es un APK de prueba, no una versión certificada para producción.
 
-Comprobaciones realizadas: `assembleDebug` y `lintDebug` correctos (0 errores; advertencias de versiones/estilo), manifiesto inspeccionado y firma del APK verificada. ADB funciona; todavía no detecta un dispositivo conectado/autorizado.
+## Instalar en el teléfono, sin PC ni USB
 
-## Qué hace esta versión
+1. Desde el teléfono, descargá `copiloto-0.2.0-debug.apk` en [Releases](https://github.com/tavanofede-png/copiloto-digital-android/releases/tag/v0.2.0).
+2. Instalalo y abrí **Copiloto**. Android puede pedir autorización para instalar desde el navegador.
+3. Abrí **Configurar conexión**, pegá el código de conexión recibido por privado y tocá **Guardar y probar**. El servidor ya viene configurado: `https://copiloto-realtime-api.vercel.app`.
+4. Iniciá el acompañamiento, habilitá mostrar sobre otras apps y aceptá compartir **la pantalla completa**. Las notificaciones son opcionales.
+5. Abrí Chrome u otra app, tocá la burbuja y elegí **Preguntar por voz** o escribí tu consulta. El micrófono se solicita al usar voz; tocá **Terminar y preguntar** al terminar.
+6. Escuchá la indicación y realizá el paso. Podés pedir el siguiente, indicar que no lo encontrás, repetir o cerrar el panel para ver mejor la pantalla.
+7. Finalizá desde el panel, la app o la notificación. Una nueva sesión vuelve a pedir consentimiento de pantalla.
 
-1. Abrí Copiloto y tocá **Iniciar acompañamiento**.
-2. Permití mostrar sobre otras apps y regresá a Copiloto.
-3. Permití las notificaciones si Android las solicita. Denegarlas no impide la sesión.
-4. Tocá **Permitir y comenzar** y aceptá compartir la pantalla completa.
-5. Abrí Chrome u otra app. La burbuja se puede arrastrar y se acomoda a un lateral.
-6. Tocá la burbuja y luego **Probar captura**. El panel y la burbuja se ocultan antes de capturar.
-7. Comprobá la vista previa. Al cerrar el panel se descarta la imagen.
-8. Finalizá desde el panel, la notificación o la pantalla de sesión.
+Necesitás Android 8+ e internet. El código de conexión es distinto de la clave de OpenAI: **no pegues la API key en la app**. El código no se publica en el repositorio ni en el APK; compartilo por privado con quien vaya a probar.
 
-No usa AccessibilityService ni ejecuta acciones en otras aplicaciones. No tiene acceso a internet en esta etapa. No pide micrófono hasta implementar voz.
+## Qué está implementado
+
+- Burbuja arrastrable, sesión explícita con notificación y captura bajo demanda mediante MediaProjection.
+- Consulta por texto o grabación PCM mono de 24 kHz, con un máximo de 20 segundos. Una actividad visible controla el micrófono; no se escucha permanentemente.
+- Conexión HTTP del teléfono al backend; una sesión WebSocket Realtime por consulta en el servidor. La respuesta llega al terminar la consulta: no es una conversación de audio continua.
+- Función `show_guidance` con JSON validado, un paso breve en español, nivel de riesgo y coordenadas normalizadas del centro del elemento.
+- Voz Realtime cuando su transcripción coincide con la indicación validada; síntesis de voz de Android como alternativa.
+- Highlight temporal que permite tocar la app debajo, sin inyectar acciones. Se oculta con confianza menor de 0,65, riesgo alto o confirmación sensible.
+- Contexto corto de hasta seis mensajes de texto en memoria y cancelación de solicitudes.
+- La copia enviada al modelo lleva una cuadrícula de referencia para ayudar a ubicar los elementos; la pantalla del usuario no se modifica.
+- Vista previa de captura para diagnóstico en el APK debug.
+
+La precisión visual depende del modelo. Los recuadros son aproximados y la persona debe comprobar el contenido antes de actuar. No se han implementado cuentas, Grok, modo demo con recorridos preparados ni modelos locales.
 
 ## Arquitectura
 
 ```text
-MainActivity + Compose
-  ├── PermissionManager: overlay y consentimiento MediaProjection
-  └── AssistanceSessionManager: estado efímero de la sesión
-        └── MediaProjectionService (foreground, propietario de los recursos)
-              ├── OverlayController + BubbleView
-              └── ScreenCaptureManager (HandlerThread)
-                    └── MediaProjection → un VirtualDisplay por consentimiento
-                          → ImageReader solo durante la solicitud
-                          → JPEG en memoria → vista previa temporal
+Android
+  MainActivity / Compose → permisos y configuración
+  MediaProjectionService → sesión, burbuja y captura puntual
+    VoiceCaptureActivity → pregunta PCM / alternativa por texto
+    HttpAssistantApi → POST /assist autenticado por HTTPS
+        Backend Vercel (Node.js)
+          → WebSocket OpenAI Realtime: audio + imagen + contexto
+          → show_guidance → validación y política de riesgo
+          → voz correspondiente al mensaje validado
+    GuidanceSpeaker + HighlightOverlay → explicación y marca temporal
 ```
 
-Se usa un único servicio para que la captura, la notificación y los overlays tengan el mismo ciclo de vida. Cada inicio solicita consentimiento nuevo. Entre solicitudes el VirtualDisplay queda sin superficie; no se consumen frames ni se transmite video. Se redimensiona el display existente al rotar, sin reutilizar el token para crear otro.
+Cada consentimiento crea un VirtualDisplay, que queda sin superficie entre solicitudes. Los overlays se ocultan antes de capturar. La imagen se comprime a JPEG 80, ancho máximo 1080 y lado mayor máximo 1920. No se transmite video continuo.
 
-La imagen incluye la pantalla completa y conserva su proporción al comprimir. Se conserva la relación entre las dimensiones reales y las dimensiones del JPEG para la futura conversión de coordenadas. Se usa JPEG 80, ancho máximo 1080 y lado mayor máximo 1920.
+## Desarrollar Android
 
-## Requisitos
+Cloná [el repositorio](https://github.com/tavanofede-png/copiloto-digital-android) y abrí la raíz en Android Studio. Requiere JDK 17/21, SDK 36 y Build Tools 35.0.0.
 
-- Windows, Linux o macOS con JDK 17 o 21.
-- Android SDK: plataforma 36, Build Tools 35.0.0 y platform-tools.
-- Teléfono Android 8+ (API 26); preferible Android 12+ para la demo.
-- Depuración USB habilitada para instalar desde ADB.
-- Internet para descargar dependencias de compilación.
-
-Versiones fijadas: AGP 8.13.2, Gradle 8.13, Kotlin/Compose Compiler 2.2.20, Compose BOM 2025.08.01. `compileSdk` y `targetSdk`: 36.
-
-## Cómo ejecutar Android
-
-### Entorno portable de este proyecto (Windows)
+En Windows podés usar el entorno portable, sin modificar el PATH global:
 
 ```powershell
-# Instala herramientas oficiales en .tools; no modifica el PATH global.
 .\scripts\setup-android.ps1
-
-# Compila usando ese entorno y cachés locales al proyecto.
-.\scripts\build.ps1
-
-# Comprobaciones de código.
-.\scripts\build.ps1 -Tasks @('testDebugUnitTest', 'lintDebug')
-
-# Conectá el teléfono y aceptá la autorización de depuración en su pantalla.
-. .\scripts\android-env.ps1
-adb devices -l
-adb install -r app/build/outputs/apk/debug/app-debug.apk
-adb shell am start -n ar.com.copiloto/.MainActivity
+.\scripts\build.ps1 -Tasks @('assembleDebug', 'testDebugUnitTest', 'lintDebug')
 ```
 
-También podés instalar y abrir en un solo paso con `.\scripts\install-debug.ps1` (o `-Serial ID` si hay varios dispositivos).
-
-`setup-android.ps1 -AcceptLicenses` permite aceptar las licencias del SDK sin interacción. Solo usalo si ya leíste y aceptaste las condiciones oficiales.
-
-### Android Studio / herramientas propias
-
-Abrí la carpeta raíz en Android Studio, elegí JDK 17/21 y configurá la ubicación del SDK. También podés usar:
-
-```text
-gradlew.bat assembleDebug        # Windows
-./gradlew assembleDebug          # Linux/macOS
-```
-
-En terminal necesitás `JAVA_HOME` y `ANDROID_HOME` (o `sdk.dir` en `local.properties`). El Wrapper verifica el SHA-256 de la distribución Gradle.
-
-APK: `app/build/outputs/apk/debug/app-debug.apk`.
-
-## Colaborar desde GitHub
+O con herramientas propias:
 
 ```sh
-git clone https://github.com/tavanofede-png/copiloto-digital-android.git
-cd copiloto-digital-android
+./gradlew assembleDebug testDebugUnitTest lintDebug
+# Windows: gradlew.bat
 ```
 
-Abrí esa carpeta en Android Studio o seguí las instrucciones de compilación anteriores. El repositorio contiene código y documentación; el SDK, JDK, cachés, APKs, archivos `.env` y claves de firma quedan excluidos.
+APK generado: `app/build/outputs/apk/debug/app-debug.apk`. La instalación por ADB es opcional mediante `scripts/install-debug.ps1`; el APK publicado se instala directamente desde el teléfono.
 
-La rama `main` contiene la primera entrega (fases 1–3). Antes de integrar voz e IA falta validar la burbuja y la captura sobre Chrome en un teléfono. Consultá [el registro de validación](docs/VALIDATION.md) para retomar desde el estado comprobado.
+Versiones fijadas: Gradle 8.13, AGP 8.13.2, Kotlin 2.2.20 y Compose BOM 2025.08.01. `compileSdk`/`targetSdk` 36 y `minSdk` 26. Para otro servidor, compilá con `-PassistantApiBaseUrl=https://tu-servidor.example` o cambialo en Configurar conexión. Nunca uses propiedades Gradle para introducir la API key.
 
-## Cómo ejecutar backend
+## Desarrollar y desplegar el backend
 
-Pendiente de la fase 5, después de la validación física de las fases 1–3. Será un proxy con `POST /assist`; las credenciales del proveedor permanecerán fuera del APK. No existe un endpoint simulado que se presente como IA real.
+Ver [backend/README.md](backend/README.md) para la configuración, contrato y despliegue. Las variables `OPENAI_API_KEY`, `OPENAI_REALTIME_MODEL` y `BACKEND_TOKEN` viven en el servidor. El APK solo contiene la URL pública y solicita el código al primer uso.
 
-## Variables de entorno
+```powershell
+cd backend
+npm ci
+Copy-Item .env.example .env
+# Completá .env localmente; no lo subas a GitHub.
+npm test
+npm start
+```
 
-Actualmente no se requiere una API key. El SDK y JDK portables se configuran por proceso en `scripts/android-env.ps1`.
+El servidor local escucha en `127.0.0.1:3000`. La app exige HTTPS, por lo que para el teléfono se usa el despliegue online. Salud pública: [GET /health](https://copiloto-realtime-api.vercel.app/health); las consultas requieren autenticación.
 
-En fase 5 se incorporarán `AI_API_KEY`, `AI_MODEL`, `PORT` y `.env.example`; en Android se configurará `ASSISTANT_API_BASE_URL`.
+## Privacidad y límites
 
-## Permisos y privacidad
+- El servidor necesita la clave de OpenAI; el teléfono guarda únicamente URL y código de conexión en preferencias privadas, con backups deshabilitados.
+- Capturas y audio se procesan en memoria en la app y nuestro backend; no se implementó almacenamiento de consultas ni historial visual. Se envían a OpenAI para responder y aplican las condiciones del proveedor.
+- No se registran capturas, audio, preguntas ni credenciales en los logs de la aplicación o el backend.
+- Finalizar libera captura, ventanas, micrófono, reproducción y contexto. Retirar el consentimiento o cerrar la tarea también termina la sesión.
+- Las pantallas protegidas pueden aparecer negras. La detección es heurística y puede confundir una pantalla oscura; se puede conversar sin marcar elementos.
+- El código compartido sirve para una prueba entre personas de confianza. No hay cuentas individuales. Los límites defensivos de 60 solicitudes por hora/IP y dos consultas simultáneas son **por instancia**, no una cuota global de gasto.
+- No se ha comprobado todavía el comportamiento del micrófono, overlays, rotación, permisos y ahorro de batería en un teléfono real.
 
-- `SYSTEM_ALERT_WINDOW`: burbuja sobre otras apps, se revalida al volver de Ajustes.
-- `FOREGROUND_SERVICE` y `FOREGROUND_SERVICE_MEDIA_PROJECTION`: sesión explícita con notificación y botón Finalizar.
-- `POST_NOTIFICATIONS` en Android 13+: opcional, para la notificación visible.
-- MediaProjection: consentimiento del sistema **en cada sesión**, después de conceder el overlay.
-- El orden evita guardar o reutilizar tokens mientras el usuario sale a Ajustes.
-- No se guardan capturas, grabaciones, preguntas o tokens en disco. No hay historial visual.
-- Cerrar el panel libera su vista previa. Finalizar o retirar el consentimiento libera ImageReader, VirtualDisplay, MediaProjection y ventanas.
-- Bloquear el dispositivo detiene la captura en versiones modernas de Android. Si se cierra la tarea desde Recientes se termina la sesión.
-- Los logs solo contienen eventos, dimensiones, tamaño en bytes y tipo de error; nunca imágenes, credenciales o texto sensible.
+El SDK, JDK, cachés, `.env`, metadatos Vercel, claves y APKs quedan fuera del historial Git. El binario se distribuye como adjunto de la release.
 
-## Modo demo
+## Referencias
 
-Pendiente de las fases 5–7. La vista previa actual usa capturas reales, no respuestas preparadas. Luego se añadirán dos flujos ficticios identificados como simulación, separados de la IA real.
-
-## Limitaciones
-
-- Android únicamente; sin voz, IA ni indicación visual en esta primera entrega.
-- Las pantallas protegidas pueden aparecer negras. La detección actual es una heurística que también puede confundir una pantalla oscura; se permite reintentar.
-- No se ha certificado el comportamiento en fabricantes específicos hasta probar en un teléfono.
-- Los permisos de compartir pantalla y las restricciones sobre overlays varían por versión/fabricante.
-- El futuro modelo visual puede equivocarse; los highlights serán aproximados.
-- La IA cloud requerirá conexión. Las acciones siempre las realizará la persona.
-
-## Roadmap
-
-1. **Fases 1–3**: build, burbuja y captura; validar físicamente en Chrome.
-2. **Fase 4**: SpeechRecognizer es-AR, transcripción, cancelación, texto alternativo y TextToSpeech.
-3. **Fase 5**: proxy multimodal, JSON validado y guardrails.
-4. **Fase 6**: captura + pregunta + contexto corto → un paso → voz + highlight.
-5. **Fase 7**: dos recorridos, modo demo explícito, casos de error y estabilización.
-
-Fuera de este MVP: cuentas, bases de datos, iOS, acciones automáticas, monitorización continua y SDK B2B. V2 podrá explorar asistencia local/híbrida, más idiomas y un SDK de guía contextual.
-
-## Pitch técnico breve
-
-Copiloto agrega una capa de orientación sobre las apps Android. La persona solicita ayuda; se toma una captura puntual y un modelo multimodal devuelve un único paso con coordenadas normalizadas y nivel de confianza. La app lo explica por voz y señala el elemento. La persona conserva el control y toca por sí misma. El primer hito valida los dos mecanismos nativos que hacen posible ese recorrido: overlay y MediaProjection.
-
-## Referencias técnicas
-
-- [MediaProjection: consentimiento, ciclo de vida y cambios de tamaño](https://developer.android.com/media/grow/media-projection)
-- [Compatibilidad de AGP 8.13](https://developer.android.com/build/releases/agp-8-13-0-release-notes)
-- [Herramientas oficiales de Android](https://developer.android.com/studio#command-line-tools-only)
+- [OpenAI: modelo gpt-realtime-2.1-mini](https://developers.openai.com/api/docs/models/gpt-realtime-2.1-mini)
+- [OpenAI: Realtime por WebSocket](https://developers.openai.com/api/docs/guides/voice-websockets)
+- [Android: MediaProjection](https://developer.android.com/media/grow/media-projection)

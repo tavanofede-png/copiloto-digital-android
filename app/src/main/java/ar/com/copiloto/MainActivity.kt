@@ -23,6 +23,8 @@ import ar.com.copiloto.ui.home.HomeScreen
 import ar.com.copiloto.ui.onboarding.PermissionScreen
 import ar.com.copiloto.ui.session.ActiveSessionScreen
 import ar.com.copiloto.ui.theme.CopilotoTheme
+import ar.com.copiloto.assistant.ConnectionSettings
+import ar.com.copiloto.ui.components.ConnectionDialog
 
 class MainActivity : ComponentActivity() {
     private val permissions by lazy { PermissionManager(this) }
@@ -30,6 +32,8 @@ class MainActivity : ComponentActivity() {
     private var overlayGranted by mutableStateOf(false)
     private var permissionPending by mutableStateOf(false)
     private var error by mutableStateOf<String?>(null)
+    private var showConnection by mutableStateOf(false)
+    private val connectionSettings by lazy { ConnectionSettings(this) }
 
     private val overlayPermission = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         permissionPending = false
@@ -67,6 +71,7 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(session.active) { if (session.active) setup = false }
             BackHandler(enabled = setup && !permissionPending && !session.starting) { setup = false }
             CopilotoTheme {
+                if (showConnection) ConnectionDialog(connectionSettings, { showConnection = false }, { error = null })
                 when {
                     session.active -> ActiveSessionScreen(session, ::openBrowser) {
                         stopService(Intent(this, MediaProjectionService::class.java))
@@ -77,10 +82,11 @@ class MainActivity : ComponentActivity() {
                         ::continueSetup, { setup = false; error = null },
                     )
                     else -> HomeScreen(onStart = {
+                        if (connectionSettings.token.isBlank()) { showConnection = true; return@HomeScreen }
                         overlayGranted = permissions.canShowOverlay()
                         error = null
                         setup = true
-                    }, error = error ?: session.error)
+                    }, error = error ?: session.error, onConnection = { showConnection = true })
                 }
             }
         }

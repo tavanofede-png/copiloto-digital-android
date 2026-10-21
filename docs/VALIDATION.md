@@ -1,6 +1,8 @@
-# Validación — fases 1–3
+# Validación — Android y Realtime
 
 Este registro separa implementación, compilación y evidencia física. Un build exitoso no demuestra el flujo en un teléfono.
+
+La primera entrega se conserva como registro histórico. La validación de la versión 0.2.0 figura al final; el usuario pidió continuar con Realtime y distribuir un APK que funcione por internet, sin USB.
 
 ## Estado inicial — 21 de octubre de 2026
 
@@ -69,3 +71,61 @@ No guardar imágenes personales como evidencia. Las capturas de validación, si 
 - Advertencias restantes: versiones de dependencias fijadas, sugerencias KTX y uso deliberado del origen físico izquierdo para las coordenadas del overlay.
 - ADB iniciado correctamente, sin dispositivos conectados/autorizados al último control. No se instaló ni se ejecutó la app en un teléfono.
 - No se ejecutaron pruebas instrumentadas ni se afirma que el recorrido físico haya pasado. Conectar y autorizar el teléfono es el próximo paso; las fases 4–7 permanecen pendientes.
+
+## Versión 0.2.0 — Realtime online — 21 de octubre de 2026
+
+Se implementaron voz, proxy HTTPS, validación, respuesta hablada y highlights por solicitud posterior del usuario. La prueba física que exigía el plan inicial sigue pendiente y no se considera cumplida por las pruebas de servidor.
+
+### Evidencia comprobada
+
+| Control | Resultado |
+| --- | --- |
+| `assembleDebug testDebugUnitTest lintDebug` | Correcto; último build combinado de 9 segundos |
+| Pruebas Android JVM | 3 aprobadas: riesgo, coordenadas y contexto acotado |
+| Pruebas backend `npm test` | 9 aprobadas: entradas, política, autenticación, protocolo, voz y cancelación |
+| Lint | 0 errores y 14 advertencias no bloqueantes |
+| Firma APK | Correcta, esquema v2 |
+| Manifiesto APK | `ar.com.copiloto`, versión 0.2.0, API 26–36, INTERNET y RECORD_AUDIO presentes; sin AccessibilityService |
+| Revisión de secretos | Clave del proveedor y código de conexión ausentes de los 62 archivos fuente candidatos y las 123 entradas descomprimidas del APK |
+| Exclusiones Git | `.env`, `.env.local` y metadatos `.vercel` ignorados; `.env.example` vacío de credenciales incluido |
+| Backend publicado | `https://copiloto-realtime-api.vercel.app` |
+| Salud HTTPS | HTTP 200 con configuración activa |
+| Consulta sin código | HTTP 401 |
+| Consulta autenticada vacía | HTTP 400, sin consumir inferencia |
+| OpenAI real desde Vercel | HTTP 200, `gpt-realtime-2.1-mini`, audio de entrada + imagen + voz de salida |
+
+Las advertencias de lint corresponden a versiones fijadas, sugerencias de API/estilo y el origen físico de coordenadas. No se hicieron pruebas instrumentadas ni instalación en dispositivo.
+
+### Prueba real de voz y visión
+
+- Entrada: pantalla ficticia de 1080 × 1920, con botones «Facturas» y «Consumo», más audio sintético en español: «Quiero ver mi factura. ¿Dónde toco?». No se enviaron capturas personales.
+- Audio de entrada PCM16 mono 24 kHz: 170.856 bytes.
+- Consulta entendida: «El usuario quiere ver su factura y pregunta dónde tocar».
+- Respuesta: «Tocá el botón “Facturas” (está arriba del botón “Consumo”) para abrir el listado de facturas».
+- Objetivo: `Facturas`, centro normalizado `(0.50, 0.35)`, confianza 0.95, riesgo LOW. El centro cayó dentro del botón de prueba. El tamaño del recuadro sigue siendo aproximado.
+- Voz Realtime recibida: 278.400 bytes PCM; la transcripción coincidió con la indicación validada.
+- Duración del pedido HTTPS: 5.994 ms. Es una observación puntual, no una garantía de latencia.
+- Una prueba previa sin cuadrícula dio una ubicación vertical imprecisa. Se agregó una cuadrícula únicamente a la copia enviada al modelo y se comprobó la ubicación anterior con ella. No demuestra precisión general en otras pantallas.
+
+### APK distribuido
+
+- Archivo: `copiloto-0.2.0-debug.apk`, generado desde `app/build/outputs/apk/debug/app-debug.apk`.
+- Tamaño: 10.807.953 bytes.
+- SHA-256: `48f66a8de18e00175deaf13f6b3b26b348f1edd7579b7c650c564593bae6e5ce`.
+- Endpoint HTTPS preconfigurado. El usuario ingresa una vez el código de conexión recibido por privado. La clave de OpenAI permanece en secretos de producción de Vercel.
+- Binario debug para pruebas; no constituye una versión de tienda ni una validación física aprobada.
+
+### Pendiente en un teléfono real
+
+1. Instalar desde la release, guardar y probar el código por internet móvil/Wi-Fi, sin PC.
+2. Conceder y denegar los permisos de overlay, notificaciones, pantalla completa y micrófono.
+3. Ver la burbuja sobre Chrome, arrastrarla y abrir/cerrar el panel con fuente grande.
+4. Escribir una consulta y verificar que la captura excluya panel, burbuja y teclado.
+5. Hablar, finalizar y cancelar la grabación; comprobar que la pantalla capturada sea la app anterior y que el micrófono se cierre al salir.
+6. Escuchar voz Realtime, repetir y cancelar; comprobar TTS alternativo cuando no llega voz válida.
+7. Comprobar el highlight, tocar la app debajo y confirmar que se borre a los seis segundos. Verificar baja confianza y riesgo alto con pantallas ficticias.
+8. Rotar, probar una pantalla protegida, interrumpir internet y reintentar.
+9. Finalizar desde panel, app, notificación e indicador del sistema; verificar que no queden captura, audio ni ventanas.
+10. Volver a iniciar y confirmar consentimiento nuevo. Revisar al menos dos recorridos ficticios completos antes de presentar la demo.
+
+No se afirma funcionamiento físico del micrófono, overlay, reproducción, MediaProjection ni ubicación de coordenadas hasta completar estos controles.

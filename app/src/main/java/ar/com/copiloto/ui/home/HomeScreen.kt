@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import ar.com.copiloto.AppBrand
 
 @Composable
-fun HomeScreen(onStart: () -> Unit, error: String? = null) {
+fun HomeScreen(onStart: () -> Unit, error: String? = null, onConnection: () -> Unit = {}) {
     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(
             Modifier.safeDrawingPadding().fillMaxSize()
@@ -24,7 +24,7 @@ fun HomeScreen(onStart: () -> Unit, error: String? = null) {
         ) {
             Text(AppBrand.name, style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold)
-            Text("Versión de prueba · pantalla y burbuja", style = MaterialTheme.typography.labelLarge,
+            Text("Voz y pantalla · Realtime", style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(12.dp))
             Box(Modifier.size(88.dp).background(MaterialTheme.colorScheme.primaryContainer, CircleShape),
@@ -54,6 +54,7 @@ fun HomeScreen(onStart: () -> Unit, error: String? = null) {
             Text("Cuando necesites ayuda, tocá la burbuja. Solo analizamos la pantalla cuando pedís ayuda.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
+            TextButton(onClick = onConnection, modifier = Modifier.heightIn(min = 48.dp)) { Text("Configurar conexión") }
         }
     }
 }

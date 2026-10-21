@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "functions": { "api/assist.mjs": { "maxDuration": 60 } },
+  "rewrites": [
+    { "source": "/assist", "destination": "/api/assist" },
+    { "source": "/health", "destination": "/api/health" }
+  ]
+}

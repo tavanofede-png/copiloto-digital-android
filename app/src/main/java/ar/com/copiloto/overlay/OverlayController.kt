@@ -18,6 +18,13 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.EditText
+import android.text.InputType
+import android.text.InputFilter
+import android.view.inputmethod.InputMethodManager
+import ar.com.copiloto.BuildConfig
+import ar.com.copiloto.assistant.GuidanceResponse
+import ar.com.copiloto.assistant.GuidanceRisk
 import ar.com.copiloto.capture.ScreenCapture
 import ar.com.copiloto.capture.ScreenGeometry
 import kotlin.math.abs
@@ -28,6 +35,10 @@ class OverlayController(
     private val context: Context,
     private val onCapture: () -> Unit,
     private val onStop: () -> Unit,
+    private val onVoice: () -> Unit,
+    private val onQuestion: (String) -> Unit,
+    private val onCancel: () -> Unit,
+    private val onRepeat: () -> Unit,
 ) {
     private val windows = context.getSystemService(WindowManager::class.java)
     private val bubble = BubbleView(context)
@@ -36,6 +47,7 @@ class OverlayController(
     private var preview: Bitmap? = null
     private var animator: ValueAnimator? = null
     private var busy = false
+    private val highlight = HighlightOverlay(context)
     private val bubbleParams = WindowManager.LayoutParams(
         dp(64), dp(64), WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
@@ -131,6 +143,7 @@ class OverlayController(
         clampPosition()
         updatePosition()
         hidePanel()
+        highlight.clear()
     }
 
     fun prepareCapture() {
@@ -138,6 +151,38 @@ class OverlayController(
         hidePanel()
         bubble.state = BubbleState.THINKING
         bubble.visibility = View.INVISIBLE
+        highlight.clear()
+    }
+
+    fun prepareVoice() {
+        busy = true
+        highlight.clear()
+        hidePanel()
+        bubble.state = BubbleState.LISTENING
+        bubble.visibility = View.INVISIBLE
+    }
+
+    fun setState(state: BubbleState) { bubble.state = state }
+
+    fun showInput() {
+        busy = false
+        bubble.visibility = View.VISIBLE
+        bubble.state = BubbleState.IDLE
+        showPanel()
+    }
+
+    fun showLoading() {
+        bubble.visibility = View.VISIBLE
+        bubble.state = BubbleState.THINKING
+        showPanel(loading = true)
+    }
+
+    fun showGuidance(guidance: GuidanceResponse) {
+        busy = false
+        bubble.visibility = View.VISIBLE
+        bubble.state = BubbleState.IDLE
+        if (guidance.canHighlight) highlight.show(guidance.target)
+        showPanel(guidance = guidance)
     }
 
     fun showCapture(capture: ScreenCapture) {
@@ -154,7 +199,8 @@ class OverlayController(
         showPanel(error = message)
     }
 
-    private fun showPanel(capture: ScreenCapture? = null, error: String? = null) {
+    private fun showPanel(capture: ScreenCapture? = null, error: String? = null,
+        guidance: GuidanceResponse? = null, loading: Boolean = false) {
         hidePanel()
         val content = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
@@ -165,12 +211,21 @@ class OverlayController(
                 setStroke(dp(1), Color.rgb(219, 226, 219))
             }
         }
-        content.addView(text(if (capture != null) "Tu pantalla, a pedido" else "Estoy acá para ayudarte", 23f, true))
+        val title = when {
+            loading -> "Estoy mirando tu pantalla…"
+            guidance?.risk == GuidanceRisk.HIGH -> "Atención antes de continuar"
+            guidance != null -> "Tu próximo paso"
+            capture != null -> "Tu pantalla, a pedido"
+            else -> "¿Qué necesitás hacer?"
+        }
+        content.addView(text(title, 23f, true))
         val detail = when {
+            loading -> "Estoy preparando una indicación. Podés cancelar cuando quieras."
+            guidance != null -> guidance.message
             error != null -> error
             capture?.likelyProtected == true -> "Esta pantalla parece estar protegida o vacía. Probá en otra aplicación."
             capture != null -> "¿Reconocés la pantalla que estabas viendo? La imagen se borra al cerrar este panel."
-            else -> "Abrí otra app y comprobá que puedo ver la pantalla cuando lo pedís."
+            else -> "Preguntá por voz o escribí tu consulta. Te acompaño de a un paso."
         }
         content.addView(text(detail, 17f).apply { setPadding(0, dp(12), 0, dp(12)) })
         if (capture != null && !capture.likelyProtected) {
@@ -185,7 +240,33 @@ class OverlayController(
             content.addView(text("${capture.screenWidth} × ${capture.screenHeight} → ${capture.imageWidth} × ${capture.imageHeight} · ${capture.jpeg.size / 1024} KB", 14f)
                 .apply { setPadding(0, dp(8), 0, dp(8)) })
         }
-        content.addView(button(if (capture == null) "Probar captura" else "Capturar de nuevo") { onCapture() })
+        if (loading) {
+            content.addView(button("Cancelar consulta") { onCancel() })
+        } else if (guidance != null) {
+            if (guidance.heardQuestion.isNotBlank()) content.addView(text("Entendí: ${guidance.heardQuestion}", 15f))
+            content.addView(button("Ya lo hice, ¿ahora?") { onQuestion("Ya hice el paso anterior. ¿Cómo sigo con mi objetivo?") })
+            content.addView(button("No lo encuentro") { onQuestion("No encuentro lo que me indicaste. Mirá esta pantalla y explicámelo de otra forma.") })
+            content.addView(button("Repetir indicación") { onRepeat() })
+        } else {
+            content.addView(button("Preguntar por voz") { onVoice() })
+            val input = EditText(context).apply {
+                hint = "O escribí qué querés hacer"
+                textSize = 17f
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+                maxLines = 3
+                filters = arrayOf(InputFilter.LengthFilter(800))
+                contentDescription = "Escribí tu consulta"
+                setTextColor(Color.rgb(34, 44, 40))
+                setHintTextColor(Color.rgb(82, 99, 90))
+                minHeight = dp(56)
+            }
+            content.addView(input)
+            content.addView(button("Enviar consulta") {
+                val question = input.text.toString().trim()
+                if (question.isBlank()) input.error = "Escribí qué necesitás hacer." else onQuestion(question)
+            })
+            if (BuildConfig.DEBUG) content.addView(button("Verificar captura") { onCapture() })
+        }
         content.addView(button("Cerrar panel") { hidePanel() })
         content.addView(button("Finalizar acompañamiento") { onStop() })
         val geometry = ScreenGeometry.read(context)
@@ -196,18 +277,24 @@ class OverlayController(
         val params = WindowManager.LayoutParams(
             minOf(geometry.width - dp(32), dp(400)), WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_SECURE,
             PixelFormat.TRANSLUCENT,
-        ).apply { gravity = Gravity.CENTER }
+        ).apply {
+            if (guidance != null) {
+                gravity = (if ((guidance.target.y ?: .5) < .5) Gravity.BOTTOM else Gravity.TOP) or Gravity.CENTER_HORIZONTAL
+                y = dp(56)
+            } else gravity = Gravity.CENTER
+            softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE or WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        }
         // Bound height so controls remain reachable with large text and in landscape.
         scroll.measure(View.MeasureSpec.makeMeasureSpec(params.width, View.MeasureSpec.EXACTLY),
             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
         if (scroll.measuredHeight > geometry.height - dp(120)) params.height = geometry.height - dp(120)
-        windows.addView(scroll, params)
-        panel = scroll
+        runCatching { windows.addView(scroll, params); panel = scroll }.onFailure { onStop() }
     }
 
     fun hidePanel() {
+        panel?.windowToken?.let { runCatching { context.getSystemService(InputMethodManager::class.java).hideSoftInputFromWindow(it, 0) } }
         panel?.let { runCatching { windows.removeViewImmediate(it) } }
         panel = null
         preview?.recycle()
@@ -218,6 +305,7 @@ class OverlayController(
         animator?.cancel()
         animator = null
         hidePanel()
+        highlight.clear()
         if (attached) runCatching { windows.removeViewImmediate(bubble) }
         attached = false
     }

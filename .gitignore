@@ -20,3 +20,6 @@ local.properties
 Thumbs.db
 captures/
 artifacts/
+node_modules/
+.vercel/
+*.local.properties

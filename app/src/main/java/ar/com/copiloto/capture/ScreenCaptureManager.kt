@@ -195,6 +195,10 @@ class ScreenCaptureManager(
         }
     }
 
+    fun cancelCapture() {
+        if (!closing.get()) worker.post { finish(Result.failure(IllegalStateException("Consulta cancelada."))) }
+    }
+
     private fun release(stopProjection: Boolean) {
         if (released) return
         finish(Result.failure(IllegalStateException("La sesión terminó.")))
