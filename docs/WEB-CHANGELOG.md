@@ -65,4 +65,10 @@
 - Añadido el perfil del nieto a las respuestas de ejemplo desplegables.
 - Seleccionado cada perfil mediante CSS, conservando el archivo de imagen recibido.
 
+### Respuesta de Nieto dentro del diálogo
+
+- Eliminados los desplegables y el control «Ver ejemplo de respuesta» de las tres cajas.
+- Integrada la respuesta de Nieto como un segundo globo siempre visible, junto a la pregunta de la abuela.
+- Conservados los avatares y colocado el texto explicativo debajo de la conversación.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
