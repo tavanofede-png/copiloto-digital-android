@@ -119,4 +119,9 @@
 - Conservados ubicación, permisos, ping y aviso de voz dentro del mockup. El diseño se adapta a escritorio y celular.
 - Mantenido el alcance acordado: datos ficticios y próxima función, sin monitorización real ni cambios en Android/backend.
 
+### Retirado el pretítulo «QUÉ ES»
+
+- Eliminada la etiqueta de pretítulo de esa sección, según el pedido del usuario.
+- Conservados su título principal, el contenido, las tarjetas y el enlace de navegación.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
