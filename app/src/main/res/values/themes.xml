@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BaseTheme.Copiloto" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">#222C28</item>
+        <item name="android:colorAccent">#275F52</item>
+        <item name="android:windowBackground">#F6F5F0</item>
+    </style>
+    <style name="Theme.Copiloto" parent="BaseTheme.Copiloto" />
+</resources>
