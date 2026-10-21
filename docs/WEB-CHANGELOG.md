@@ -30,4 +30,8 @@
 - Alineado su borde izquierdo con el pretítulo «Tu nieto, siempre cerca», respetando el margen interior del hero en escritorio y móvil.
 - Conservados el título, el párrafo y el resto de la sección en sus posiciones.
 
+### Nuevo título de la sección «Qué es»
+
+- Reemplazado el título por «Un asistente personal para ayudarte a usar tu Smartphone.», según el texto solicitado.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
