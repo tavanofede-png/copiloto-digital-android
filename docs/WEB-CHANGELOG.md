@@ -164,4 +164,11 @@
 - Ajustados los diálogos de actividad y voz para que se abran dentro de los límites de la pantalla de la tablet.
 - Conservados los textos, la paleta de la app y sus controles.
 
+### Publicación de la página en Vercel
+
+- Publicado el sitio estático en https://nieto-web.vercel.app, en un proyecto separado de la API.
+- Añadida configuración para servir `web/` sin instalación ni compilación.
+- Excluidos del despliegue los archivos locales, las variables de entorno y la documentación.
+- Documentado el comando de publicación. El despliegue automático desde GitHub queda sin conectar.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.

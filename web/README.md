@@ -35,3 +35,17 @@ No realizar cambios de diseño, colores, contenido, secciones ni funciones sin u
 ## Publicar
 
 La carpeta `web/` es el sitio estático completo y se puede publicar sin build. Configurar esa carpeta como directorio público, manteniendo `index.html` y `assets/` juntos. No publicar la raíz del repositorio, que también contiene Android y el backend. Esta integración no cambia el despliegue del backend existente.
+
+### Vercel
+
+Sitio público: **https://nieto-web.vercel.app**. Proyecto `nieto-web`, en `federicos-projects-45a151a0`.
+
+`web/vercel.json` desactiva la instalación y el build: Vercel sirve directamente esta carpeta. `.vercelignore` excluye documentación, configuración local y archivos de entorno.
+
+Desde la raíz del repositorio, con una sesión autorizada de Vercel:
+
+```sh
+vercel deploy --cwd web --project nieto-web --scope federicos-projects-45a151a0 --prod --yes
+```
+
+El despliegue se realiza con la CLI. La publicación automática desde GitHub todavía no está conectada.
