@@ -34,4 +34,8 @@
 
 - Reemplazado el título por «Un asistente personal para ayudarte a usar tu Smartphone.», según el texto solicitado.
 
+### Espacio entre el primer bloque y «QUÉ ES»
+
+- Eliminado el espacio doble entre secciones: la separación hasta el pretítulo pasa de 176 px a 32 px.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
