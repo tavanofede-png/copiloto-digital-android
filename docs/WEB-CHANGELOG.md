@@ -38,4 +38,8 @@
 
 - Eliminado el espacio doble entre secciones: la separación hasta el pretítulo pasa de 176 px a 32 px.
 
+### Color de «Smartphone» en «Qué es»
+
+- Aplicado a «Smartphone» el mismo azul claro del texto «TE ACOMPAÑA» del título principal, usando la variable de color existente.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.

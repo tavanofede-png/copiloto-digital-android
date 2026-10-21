@@ -254,5 +254,6 @@
 
     #inicio{padding-bottom:0}
     #que-es{padding-top:32px}
+    #que-es h2 .accent{color:var(--blue)}
     #que-es .section-eyebrow{padding-left:calc(clamp(25px,4vw,60px) + 1px)}
     @media(max-width:520px){#que-es .section-eyebrow{padding-left:23px}}
