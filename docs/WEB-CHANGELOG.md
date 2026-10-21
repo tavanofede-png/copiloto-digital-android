@@ -25,4 +25,9 @@
 
 - Reemplazada la oración por el texto exacto pedido: «Tunieto digital te explica paso a paso, con paciencia y sin seguro. para que uses tu celular con mas confianza a tu ritmo.»
 
+### Alineación del pretítulo «QUÉ ES»
+
+- Alineado su borde izquierdo con el pretítulo «Tu nieto, siempre cerca», respetando el margen interior del hero en escritorio y móvil.
+- Conservados el título, el párrafo y el resto de la sección en sus posiciones.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
