@@ -124,4 +124,11 @@
 - Eliminada la etiqueta de pretítulo de esa sección, según el pedido del usuario.
 - Conservados su título principal, el contenido, las tarjetas y el enlace de navegación.
 
+### Nuevos títulos de las cajas de «Qué es»
+
+- Caja 1: «Ayuda Paso a Paso».
+- Caja 2: «Nieto Sabe Dónde Estás Parado».
+- Caja 3: «De Asistente a Tutor».
+- Conservados los diálogos, avatares, iconos y textos explicativos.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
