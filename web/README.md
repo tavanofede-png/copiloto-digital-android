@@ -42,10 +42,6 @@ Sitio público: **https://nieto-web.vercel.app**. Proyecto `nieto-web`, en `fede
 
 `web/vercel.json` desactiva la instalación y el build: Vercel sirve directamente esta carpeta. `.vercelignore` excluye documentación, configuración local y archivos de entorno.
 
-Desde la raíz del repositorio, con una sesión autorizada de Vercel:
+El proyecto está conectado a `tavanofede-png/copiloto-digital-android`, con `web` como directorio raíz. Cada push a `main` inicia un despliegue de producción y actualiza el mismo dominio cuando termina correctamente. Las otras ramas generan vistas previas.
 
-```sh
-vercel deploy --cwd web --project nieto-web --scope federicos-projects-45a151a0 --prod --yes
-```
-
-El despliegue se realiza con la CLI. La publicación automática desde GitHub todavía no está conectada.
+Para publicar una actualización, guardar los cambios y hacer push a `main`; no hace falta ejecutar la CLI de Vercel. El estado y los errores de cada despliegue se consultan en el proyecto `nieto-web` de Vercel y en las comprobaciones del commit en GitHub.

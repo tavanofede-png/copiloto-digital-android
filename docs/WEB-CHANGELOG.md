@@ -171,4 +171,11 @@
 - Excluidos del despliegue los archivos locales, las variables de entorno y la documentación.
 - Documentado el comando de publicación. El despliegue automático desde GitHub queda sin conectar.
 
+### Despliegues automáticos desde GitHub
+
+- Conectado el proyecto `nieto-web` con `tavanofede-png/copiloto-digital-android`, con autorización explícita del usuario.
+- Configurado `web` como directorio raíz y `main` como rama de producción.
+- Las actualizaciones publicadas en `main` se despliegan automáticamente en https://nieto-web.vercel.app.
+- Actualizadas las instrucciones de publicación para utilizar la integración de GitHub.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
