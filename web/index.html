@@ -7,6 +7,7 @@
   <title>NIETO — Siempre a tu lado</title>
   <meta name="description" content="NIETO acompaña a adultos mayores de 65 a 99 años a usar su celular con calma, claridad y paciencia. Siempre a tu lado." />
   <link rel="stylesheet" href="assets/site.css" />
+  <link rel="stylesheet" href="assets/family.css" />
 </head>
 <body>
   <header class="top">
@@ -17,6 +18,7 @@
       <div class="menu">
         <a href="#que-es">QUÉ ES</a>
         <a href="#como-funciona">CÓMO TE AYUDA</a>
+        <a href="#familias">GRUPO FAMILIAR</a>
         <a class="cta" href="#descargar">DESCARGAR <span aria-hidden="true">↓</span></a>
       </div>
     </nav>
@@ -168,24 +170,91 @@
       </div>
     </section>
 
-    <section class="section" id="familias">
-      <div class="wrap family">
-        <div class="family-card">
-          <h3>Más tranquilidad para hijos, nietos y familiares.</h3>
-          <p>NIETO también habla con la familia. La propuesta de valor no es solo tecnológica: es emocional. Ayuda a reducir frustración y a aumentar independencia.</p>
-          <div class="quote">
-            <img src="assets/nieto-familia.png" alt="" aria-hidden="true" width="150" height="220" loading="lazy" decoding="async" />
-            “Una pequeña ayuda puede devolver mucha autonomía.”
-          </div>
+    <section class="section gf-section" id="familias" aria-labelledby="gf-title">
+      <div class="wrap gf-layout">
+        <div class="gf-copy">
+          <span class="eyebrow">Grupo familiar</span>
+          <h2 id="gf-title">Tu familia,<br />siempre <span>cerca.</span></h2>
+          <p class="gf-intro">Acompañá a tu ser querido, también a la distancia. Con su permiso, podrás saber cómo usa el celular y recibir una alerta si necesita una mano.</p>
+          <span class="gf-coming">Próxima función de NIETO</span>
+          <ul class="gf-features">
+            <li><span class="gf-feature-icon"><i class="gf-icon" data-icon="clock" aria-hidden="true"></i></span><div><strong>Su última actividad</strong><p>Cuándo usó Nieto y qué sitios web visitó.</p></div></li>
+            <li><span class="gf-feature-icon"><i class="gf-icon" data-icon="activity" aria-hidden="true"></i></span><div><strong>Cómo usa su pantalla</strong><p>Actividad y tiempos de uso, de un vistazo.</p></div></li>
+            <li><span class="gf-feature-icon"><i class="gf-icon" data-icon="location" aria-hidden="true"></i></span><div><strong>Su ubicación compartida</strong><p>Mientras Nieto esté activo y tu familiar elija compartirla.</p></div></li>
+            <li><span class="gf-feature-icon"><i class="gf-icon" data-icon="shield" aria-hidden="true"></i></span><div><strong>Alertas para acompañar a tiempo</strong><p>Ante sitios sospechosos o actividades potencialmente inseguras.</p></div></li>
+          </ul>
+          <div class="gf-trust"><i class="gf-icon" data-icon="lock" aria-hidden="true"></i><p><strong>Tu familiar decide qué compartir.</strong> Podrá aceptar la invitación, elegir sus permisos y pausar el acceso.</p></div>
         </div>
-        <div class="right-copy">
-          <span class="eyebrow">Para toda la familia</span>
-          <h2>Menos miedo a la tecnología. Más confianza en el día a día.</h2>
-          <p>Para muchos adultos mayores, el problema no es la falta de interés: es que nadie les explica con calma. NIETO propone una experiencia más cercana, respetuosa y fácil de adoptar.</p>
-          <p>También es una herramienta valiosa para familias que quieren que sus seres queridos se sientan acompañados cuando usan el celular, sin depender siempre de otra persona.</p>
-          <a class="cta" href="#descargar">Quiero enterarme del lanzamiento <span aria-hidden="true">→</span></a>
+
+        <div class="gf-demo-wrap">
+          <div class="gf-demo-caption"><span>Así se verá desde tu celular</span><span class="gf-demo-badge">DEMO · DATOS FICTICIOS</span></div>
+          <div class="gf-demo" id="familia-demo">
+            <header class="gf-demo-header"><span class="gf-brand"><i class="gf-icon" data-icon="family" aria-hidden="true"></i>Tu grupo familiar</span><span class="gf-access">Acceso compartido</span></header>
+            <div class="gf-member">
+              <span class="gf-avatar" aria-hidden="true"><img src="assets/nieto-avatares.png" alt="" width="1774" height="887" loading="lazy" decoding="async" /></span>
+              <div class="gf-member-copy"><h3>Mamá</h3><p>70 años</p></div>
+              <span class="gf-session" id="gf-session"><span aria-hidden="true"></span><span id="gf-session-label">Nieto activado</span></span>
+            </div>
+            <div class="gf-scenarios" role="group" aria-label="Elegí una situación para probar la demo">
+              <span>Probá un caso</span>
+              <div><button type="button" data-gf-scenario="normal" aria-pressed="true">Uso normal</button><button type="button" data-gf-scenario="alert" aria-pressed="false">Sitio inseguro</button><button type="button" data-gf-scenario="offline" aria-pressed="false">Nieto desactivado</button></div>
+            </div>
+            <p class="gf-session-note" id="gf-session-note" hidden>No se reciben nuevos datos. Se muestran los últimos registros compartidos.</p>
+            <div class="gf-tabs" role="tablist" aria-label="Información del grupo familiar">
+              <button type="button" id="gf-tab-summary" role="tab" aria-selected="true" aria-controls="gf-panel-summary" tabindex="0" data-gf-tab="summary">Resumen</button>
+              <button type="button" id="gf-tab-activity" role="tab" aria-selected="false" aria-controls="gf-panel-activity" tabindex="-1" data-gf-tab="activity">Actividad</button>
+              <button type="button" id="gf-tab-location" role="tab" aria-selected="false" aria-controls="gf-panel-location" tabindex="-1" data-gf-tab="location">Ubicación</button>
+              <button type="button" id="gf-tab-alerts" role="tab" aria-selected="false" aria-controls="gf-panel-alerts" tabindex="-1" data-gf-tab="alerts">Alertas <span class="gf-alert-count" id="gf-alert-count" hidden>1</span></button>
+            </div>
+
+            <div class="gf-panels">
+              <div class="gf-panel" id="gf-panel-summary" role="tabpanel" aria-labelledby="gf-tab-summary" tabindex="0">
+                <div class="gf-stats">
+                  <div class="gf-stat"><span class="gf-stat-label"><i class="gf-icon" data-icon="clock" aria-hidden="true"></i>Última actividad</span><strong data-gf-data="activity" id="gf-last-activity">Hace 5 min</strong><p data-gf-data="activity">Consultó una receta con Nieto.</p><p class="gf-not-shared" data-gf-private="activity" hidden>Mamá no comparte su actividad.</p></div>
+                  <div class="gf-stat"><span class="gf-stat-label"><i class="gf-icon" data-icon="activity" aria-hidden="true"></i>Pantalla hoy</span><strong data-gf-data="screen">24 <small>min</small></strong><p data-gf-data="screen">12 min con acompañamiento.</p><p class="gf-not-shared" data-gf-private="screen" hidden>Mamá no comparte sus tiempos de uso.</p></div>
+                </div>
+                <div class="gf-site-section" data-gf-data="activity">
+                  <div class="gf-subhead"><h4>Últimos sitios visitados</h4><button type="button" class="gf-text-button" data-gf-go="activity">Ver actividad <span aria-hidden="true">→</span></button></div>
+                  <ul class="gf-sites"><li><span class="gf-site-icon"><i class="gf-icon" data-icon="web" aria-hidden="true"></i></span><div><strong>Recetas de cocina</strong><span>recetas.example</span></div><time>10:42</time></li><li><span class="gf-site-icon"><i class="gf-icon" data-icon="web" aria-hidden="true"></i></span><div><strong>Noticias del día</strong><span>noticias.example</span></div><time>10:28</time></li></ul>
+                </div>
+                <button type="button" class="gf-location-link" data-gf-go="location"><i class="gf-icon" data-icon="location" aria-hidden="true"></i><span><strong id="gf-summary-location">Ubicación compartida</strong><small id="gf-summary-location-note">En casa · actualizada hace 2 min</small></span><span aria-hidden="true">→</span></button>
+                <div class="gf-safety-line" id="gf-safety-line"><i class="gf-icon" data-icon="shield" aria-hidden="true"></i><span id="gf-safety-text">Sin alertas pendientes en este ejemplo.</span><button type="button" class="gf-text-button" id="gf-review-alert" data-gf-go="alerts" hidden>Revisar</button></div>
+              </div>
+
+              <div class="gf-panel" id="gf-panel-activity" role="tabpanel" aria-labelledby="gf-tab-activity" tabindex="0" hidden>
+                <div class="gf-subhead"><h4>Su día, paso a paso</h4><span class="gf-panel-label">Hoy · ejemplo</span></div>
+                <ol class="gf-timeline" data-gf-data="activity"><li><time>10:42</time><div><strong>Buscó una receta de cocina</strong><p>Visitó recetas.example con Nieto.</p></div></li><li><time>10:35</time><div><strong>Pidió ayuda con WhatsApp</strong><p>Practicó cómo crear un grupo.</p></div></li><li><time>10:28</time><div><strong>Leyó las noticias</strong><p>Visitó noticias.example.</p></div></li><li><time>10:15</time><div><strong>Activó el acompañamiento</strong><p>Comenzó a usar Nieto.</p></div></li></ol>
+                <p class="gf-empty" data-gf-private="activity" hidden><i class="gf-icon" data-icon="lock" aria-hidden="true"></i>Mamá eligió no compartir su actividad ni sus sitios visitados.</p>
+                <div class="gf-screen-note" data-gf-data="screen"><i class="gf-icon" data-icon="activity" aria-hidden="true"></i><p><strong>24 min de pantalla hoy.</strong> 12 min acompañada por Nieto.</p></div>
+                <p class="gf-small-note">La vista propuesta muestra eventos y tiempos de uso. No es una transmisión de la pantalla ni del contenido de sus mensajes.</p>
+              </div>
+
+              <div class="gf-panel" id="gf-panel-location" role="tabpanel" aria-labelledby="gf-tab-location" tabindex="0" hidden>
+                <div data-gf-data="location">
+                  <div class="gf-subhead"><h4 id="gf-location-title">Ubicación compartida</h4><span class="gf-panel-label" id="gf-location-updated">Hace 2 min</span></div>
+                  <div class="gf-map" role="img" aria-label="Mapa ilustrativo con una ubicación ficticia cerca de casa"><span class="gf-map-park">Plaza</span><span class="gf-map-road gf-map-road-one"></span><span class="gf-map-road gf-map-road-two"></span><span class="gf-map-road gf-map-road-three"></span><span class="gf-map-street">Calle de ejemplo</span><span class="gf-map-place"><i class="gf-icon" data-icon="location" aria-hidden="true"></i><strong>Mamá</strong></span><span class="gf-map-home">Casa</span><span class="gf-map-demo">Mapa ilustrativo</span></div>
+                  <div class="gf-location-detail"><span class="gf-site-icon"><i class="gf-icon" data-icon="location" aria-hidden="true"></i></span><div><strong>En casa</strong><p id="gf-location-note">Mamá está compartiendo su ubicación mientras Nieto está activo.</p></div></div>
+                </div>
+                <p class="gf-empty" data-gf-private="location" hidden><i class="gf-icon" data-icon="lock" aria-hidden="true"></i>Mamá eligió no compartir su ubicación. Su decisión se respeta.</p>
+                <p class="gf-small-note">Si Nieto se desactiva, la ubicación deja de actualizarse. El último registro siempre se muestra con su antigüedad.</p>
+              </div>
+
+              <div class="gf-panel" id="gf-panel-alerts" role="tabpanel" aria-labelledby="gf-tab-alerts" tabindex="0" hidden>
+                <div class="gf-subhead"><h4>Alertas de seguridad</h4><i class="gf-icon" data-icon="bell" aria-hidden="true"></i></div>
+                <div class="gf-alert-card" id="gf-alert-card" hidden><span class="gf-alert-icon"><i class="gf-icon" data-icon="shield" aria-hidden="true"></i></span><div><span class="gf-alert-kicker">Alerta de ejemplo · 10:44</span><h5>Un enlace para revisar juntos</h5><p>Mamá abrió premios.example. En esta simulación, Nieto detectó un enlace sospechoso y le sugirió no continuar.</p><p class="gf-alert-advice">Podrías contactarla para ayudarla a revisar el enlace. Una alerta indica un posible riesgo, no confirma un fraude.</p><button type="button" class="gf-button" id="gf-mark-reviewed">Marcar como revisada</button></div></div>
+                <div class="gf-alert-empty" id="gf-alert-empty"><i class="gf-icon" data-icon="shield" aria-hidden="true"></i><strong id="gf-alert-empty-title">Todo en orden por ahora</strong><p id="gf-alert-empty-text">No hay alertas pendientes en este ejemplo.</p></div>
+                <div class="gf-notifications"><label for="gf-notifications"><span><strong>Notificaciones de seguridad</strong><small>Sitios y actividades potencialmente inseguros.</small></span><input id="gf-notifications" type="checkbox" role="switch" checked /></label><button type="button" class="gf-text-button" id="gf-simulate-alert">Probar una alerta de ejemplo <span aria-hidden="true">→</span></button></div>
+              </div>
+            </div>
+
+            <div class="gf-sharing"><span><i class="gf-icon" data-icon="lock" aria-hidden="true"></i>Compartido por Mamá</span><button type="button" class="gf-text-button" id="gf-permissions-button" aria-controls="gf-permissions" aria-expanded="false">Ver permisos</button></div>
+            <fieldset class="gf-permissions" id="gf-permissions" hidden><legend>En este ejemplo, Mamá elige qué compartir</legend><label><input type="checkbox" data-gf-permission="activity" checked /><span>Actividad y sitios visitados</span></label><label><input type="checkbox" data-gf-permission="screen" checked /><span>Tiempos de uso de pantalla</span></label><label><input type="checkbox" data-gf-permission="location" checked /><span>Ubicación mientras Nieto está activo</span></label><label><input type="checkbox" data-gf-permission="alerts" checked /><span>Avisos de seguridad al grupo</span></label><p>En la app, estos permisos los otorgará o retirará tu familiar desde su propio celular.</p></fieldset>
+            <p class="gf-announcement" id="gf-announcement" role="status" aria-live="polite" hidden></p>
+          </div>
+          <p class="gf-demo-note">Demo interactiva con datos ficticios. Esta función está en desarrollo: la vista no monitorea dispositivos, consulta el GPS ni envía notificaciones reales.</p>
         </div>
       </div>
+      <div class="wrap gf-onboarding" aria-label="Cómo se propone activar Grupo familiar"><div><span>1</span><p><strong>Invitás a tu familiar</strong>Se sumará a un grupo privado.</p></div><div><span>2</span><p><strong>Elige qué compartir</strong>Los permisos estarán en sus manos.</p></div><div><span>3</span><p><strong>Acompañan a distancia</strong>Con Nieto activo y el acceso aceptado.</p></div></div>
     </section>
 
     <section class="section" id="descargar">
@@ -222,5 +291,6 @@
   </button>
 
   <script src="assets/site.js" defer></script>
+  <script src="assets/family.js" defer></script>
 </body>
 </html>

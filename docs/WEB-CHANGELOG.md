@@ -71,4 +71,13 @@
 - Integrada la respuesta de Nieto como un segundo globo siempre visible, junto a la pregunta de la abuela.
 - Conservados los avatares y colocado el texto explicativo debajo de la conversación.
 
+### Grupo familiar: próxima función y demo interactiva
+
+- Acordado con el usuario presentarlo como próxima función, con datos ficticios.
+- Reemplazada la sección de familias por la propuesta de Grupo familiar, manteniendo la paleta y añadiendo acceso en navegación.
+- Añadidas vistas de resumen, sitios/actividad, tiempos de pantalla, ubicación y alertas de seguridad.
+- Añadidos casos de prueba, controles de datos compartidos y revisión de alertas; la demo distingue una ubicación anterior de una sesión activa.
+- Documentadas las decisiones de producto y los límites de la implementación en `docs/GRUPO-FAMILIAR.md`.
+- Esta entrega es una demostración web; no monitorea dispositivos ni modifica el APK o backend.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
