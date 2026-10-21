@@ -130,6 +130,7 @@
     .ui-icon-box .ui-icon{width:26px;height:26px}
     .ui-icon[data-icon=message]{--ui-icon:url("icons/message-circle.svg")}
     .ui-icon[data-icon=screen]{--ui-icon:url("icons/device-mobile-search.svg")}
+    .ui-icon[data-icon=learn]{--ui-icon:url("icons/school.svg")}
     .ui-icon[data-icon=confidence]{--ui-icon:url("icons/shield-check.svg")}
     .ui-icon[data-icon=smile]{--ui-icon:url("icons/mood-smile.svg")}
     .ui-icon[data-icon=grid]{--ui-icon:url("icons/layout-grid.svg")}

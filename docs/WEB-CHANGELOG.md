@@ -104,4 +104,11 @@
 - Añadido un pulso titilante suave de 1,8 segundos, compartido por todas las secciones y sin desplazar el contenido.
 - Conservado el indicador verde estático cuando el dispositivo solicita movimiento reducido.
 
+### «Cómo te ayuda»: aprendizaje y autonomía
+
+- Reorientada la sección para explicar que Nieto enseña a realizar las tareas y no las hace en lugar de la persona.
+- Nuevo título: «Aprendé con Nieto, hacelo por tu cuenta».
+- Organizado el recorrido en seguir la guía, practicar y repetir, e incorporar el proceso para aplicarlo por cuenta propia.
+- Conservados el diseño, las negritas y el indicador verde animado; ajustados los iconos al contenido de los pasos.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
