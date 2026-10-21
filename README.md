@@ -1,5 +1,9 @@
 # Copiloto digital · Android
 
+## Página web de NIETO
+
+NIETO es un asistente de smartphone para adultos mayores de **65 a 99 años**. La página HTML original está integrada en [`web/`](web/README.md). Para verla, ejecutá `npm start` en la raíz y abrí `http://127.0.0.1:4173`. No requiere instalar dependencias ni compilar.
+
 Asistencia por voz y pantalla, un paso a la vez. Copiloto explica y señala; la persona toca por su cuenta. No usa AccessibilityService ni ejecuta acciones en otras apps.
 
 ## Versión 0.2.0
