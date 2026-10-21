@@ -88,4 +88,14 @@
 - Simulados los estados recibido/pendiente y un permiso independiente para recibir estos avisos.
 - Conservado el alcance acordado: próxima función con demo de ejemplo, sin mensajes reales ni cambios en Android/backend.
 
+### Unificación del UI/UX con el diseño aprobado de «Qué es»
+
+- Conservadas la paleta azul, las ilustraciones, los textos y la navegación. Se tomó como referencia la iconografía en recuadros de 44 px, las tarjetas redondeadas y la jerarquía tipográfica aprobada.
+- Reducido el padding habitual entre secciones de 88 a 36 px por lado en escritorio y a 28 px en celular; compactados también encabezados, cierre y footer.
+- Alineados los pretítulos con el margen interior del hero y añadidos acentos azules y negritas en las frases principales.
+- Actualizadas las tres tarjetas de «Cómo te ayuda» con iconos oficiales de Tabler, pasos identificados y el mismo tratamiento de bordes y hover de «Qué es».
+- Reorganizada la presentación de los gestos de Nieto con un encabezado común, iconos en sus beneficios y cuatro tarjetas visuales.
+- Alineado Grupo familiar al mismo sistema de encabezado y espaciado, conservando sus interacciones y la indicación de próxima función.
+- Unificados los iconos de botones, estados de interacción y ayuda flotante. Corregido el ajuste de títulos en pantallas de 320 px.
+
 Este registro se actualiza con los pedidos recibidos durante la sesión.
